@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我在西子湖畔 · TVC创意与AI实践</title>
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
+  background: #0a0a0a;
+  color: #f0ede8;
+  overflow-x: hidden;
+}
+
+/* ========== Scroll Snap Container ========== */
+.scroll-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar { display: none; }
+
+.section {
+  position: relative;
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 40px;
+  overflow: hidden;
+}
+
+/* ========== Navigation dots ========== */
+.nav-dots {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.nav-dots a {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(240, 237, 232, 0.25);
+  transition: all 0.4s ease;
+  text-decoration: none;
+}
+.nav-dots a:hover,
+.nav-dots a.active {
+  background: #c9a84c;
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.4);
+  transform: scale(1.3);
+}
+
+/* ========== Video Background ========== */
+.video-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.5;
+}
+.video-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.85) 100%);
+  z-index: 1;
+}
+
+/* ========== Hero ========== */
+#hero {
+  text-align: center;
+}
+#hero .content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+}
+#hero .subtitle-top {
+  font-size: 13px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+#hero h1 {
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 200;
+  letter-spacing: 4px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+#hero h1 strong {
+  font-weight: 400;
+  color: #c9a84c;
+}
+#hero .subtitle {
+  font-size: clamp(14px, 2vw, 22px);
+  font-weight: 200;
+  letter-spacing: 3px;
+  color: rgba(240, 237, 232, 0.6);
+  margin-bottom: 40px;
+}
+#hero .year {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: rgba(240, 237, 232, 0.3);
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(240, 237, 232, 0.35);
+  font-size: 11px;
+  letter-spacing: 2px;
+  animation: float 2s ease-in-out infinite;
+}
+.scroll-hint .arrow {
+  width: 16px; height: 16px;
+  border-right: 1px solid rgba(240, 237, 232, 0.35);
+  border-bottom: 1px solid rgba(240, 237, 232, 0.35);
+  transform: rotate(45deg);
+}
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ========== Common Section Styles ========== */
+.section-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 200;
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
+.section-title em {
+  font-style: normal;
+  color: #c9a84c;
+}
+.section-subtitle {
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 200;
+  letter-spacing: 3px;
+  color: rgba(240, 237, 232, 0.45);
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+.section-divider {
+  width: 40px;
+  height: 1px;
+  background: #c9a84c;
+  margin: 20px auto 40px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ========== Background Section ========== */
+#background .bg-text {
+  max-width: 800px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+#background .bg-text p {
+  font-size: clamp(15px, 1.5vw, 20px);
+  font-weight: 200;
+  line-height: 1.8;
+  color: rgba(240, 237, 232, 0.7);
+  letter-spacing: 1px;
+}
+
+/* ========== Goals / 三位一体 ========== */
+#goals {
+  background: #0d0d0d;
+}
+.goals-grid {
+  display: flex;
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.goal-card {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+  text-align: center;
+  padding: 40px 24px;
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.5s ease;
+}
+.goal-card:hover {
+  border-color: rgba(201, 168, 76, 0.4);
+  background: rgba(255,255,255,0.04);
+  transform: translateY(-4px);
+}
+.goal-card .number {
+  font-size: 32px;
+  font-weight: 200;
+  color: #c9a84c;
+  margin-bottom: 16px;
+}
+.goal-card h3 {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.goal-card p {
+  font-size: 13px;
+  font-weight: 200;
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.5);
+}
+
+/* ========== Workflow / 工作流 ========== */
+#workflow {
+  background: #0a0a0a;
+}
+.workflow-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  max-width: 1000px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  width: 45%;
+  min-width: 260px;
+  padding: 24px 20px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.step-item .step-num {
+  font-size: 14px;
+  font-weight: 400;
+  color: #c9a84c;
+  min-width: 28px;
+  letter-spacing: 1px;
+}
+.step-item .step-text h4 {
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.step-item .step-text p {
+  font-size: 12px;
+  font-weight: 200;
+  color: rgba(240, 237, 232, 0.4);
+  line-height: 1.5;
+}
+
+/* ========== AIDA ========== */
+#aida {
+  background: #0d0d0d;
+}
+.aida-grid {
+  display: flex;
+  gap: 1px;
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.aida-card {
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
+  padding: 36px 20px;
+  text-align: center;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: all 0.4s ease;
+}
+.aida-card:hover {
+  background: rgba(201, 168, 76, 0.06);
+  border-color: rgba(201, 168, 76, 0.2);
+}
+.aida-card .letter {
+  font-size: 36px;
+  font-weight: 200;
+  color: #c9a84c;
+  margin-bottom: 12px;
+}
+.aida-card h4 {
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.aida-card p {
+  font-size: 12px;
+  font-weight: 200;
+  line-height: 1.6;
+  color: rgba(240, 237, 232, 0.45);
+}
+
+/* ========== Cases ========== */
+#cases {
+  background: #0a0a0a;
+  padding: 80px 40px;
+}
+.cases-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1100px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+}
+.case-card {
+  flex: 1;
+  min-width: 280px;
+  max-width: 500px;
+  padding: 60px 36px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.015);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+.case-card:hover {
+  border-color: rgba(201, 168, 76, 0.3);
+  background: rgba(255,255,255,0.025);
+}
+.case-card video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.15;
+  z-index: 0;
+}
+.case-card .case-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.3) 50%, rgba(10,10,10,0.8) 100%);
+  z-index: 1;
+}
+.case-card .case-content {
+  position: relative;
+  z-index: 2;
+}
+.case-card .case-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #c9a84c;
+  margin-bottom: 12px;
+}
+.case-card h3 {
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 200;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.case-card .case-desc {
+  font-size: 13px;
+  font-weight: 200;
+  line-height: 1.7;
+  color: rgba(240, 237, 232, 0.5);
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* ========== Cost / 成本 ========== */
+#cost {
+  background: #0d0d0d;
+}
+.cost-grid {
+  display: flex;
+  gap: 20px;
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.cost-item {
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 32px 20px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.cost-item .cost-value {
+  font-size: 36px;
+  font-weight: 200;
+  color: #c9a84c;
+  margin-bottom: 8px;
+}
+.cost-item .cost-label {
+  font-size: 12px;
+  font-weight: 200;
+  color: rgba(240, 237, 232, 0.4);
+  letter-spacing: 1px;
+}
+
+/* ========== Footer ========== */
+#footer {
+  min-height: 60vh;
+  text-align: center;
+}
+#footer .footer-text {
+  position: relative;
+  z-index: 2;
+}
+#footer h2 {
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 200;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+}
+#footer p {
+  font-size: 14px;
+  font-weight: 200;
+  color: rgba(240, 237, 232, 0.35);
+  letter-spacing: 2px;
+}
+
+/* ========== Animations ========== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .section { padding: 60px 24px; }
+  .nav-dots { right: 14px; gap: 10px; }
+  .goals-grid { gap: 16px; }
+  .goal-card { min-width: 140px; padding: 28px 16px; }
+  .step-item { width: 100%; min-width: unset; }
+  .aida-card { min-width: 140px; }
+  .case-card { min-width: 240px; }
+  .cost-item { min-width: 140px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots">
+  <a href="#hero" class="active"></a>
+  <a href="#background"></a>
+  <a href="#goals"></a>
+  <a href="#workflow"></a>
+  <a href="#aida"></a>
+  <a href="#cases"></a>
+  <a href="#cost"></a>
+  <a href="#footer"></a>
+</nav>
+
+<!-- Scroll Container -->
+<div class="scroll-container" id="scrollContainer">
+
+  <!-- ==================== HERO ==================== -->
+  <section class="section" id="hero">
+    <video class="video-bg" autoplay muted loop playsinline poster="images/poster-hero.jpg">
+      <source src="videos/hero-bg.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+    <div class="content">
+      <div class="subtitle-top">AI · CREATIVE · PRACTICE</div>
+      <h1>AI赋能品牌传播<strong>新纪元</strong></h1>
+      <div class="subtitle">直播间TVC创意与AI实践方案</div>
+      <div class="year">2026 · STRATEGY &amp; CREATIVE</div>
+    </div>
+    <div class="scroll-hint">
+      <span>向下探索</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- ==================== BACKGROUND ==================== -->
+  <section class="section" id="background" style="background:#0a0a0a;">
+    <div class="section-title fade-in">信息洪流中，品牌如何<em>破局</em>？</div>
+    <div class="section-divider"></div>
+    <div class="bg-text fade-in">
+      <p>在信息爆炸的时代，品牌声量被海量内容稀释。<br>
+        传统TVC制作周期长、成本高、创意落地难。<br>
+        AI技术正在重塑品牌传播的方式——<br>
+        从创意构思到成片输出，全链路智能化。</p>
+    </div>
+  </section>
+
+  <!-- ==================== GOALS ==================== -->
+  <section class="section" id="goals">
+    <div class="section-title fade-in">核心<em>目标</em></div>
+    <div class="section-divider"></div>
+    <div class="section-subtitle fade-in">三位一体 · 品牌传播新范式</div>
+    <div class="goals-grid">
+      <div class="goal-card fade-in">
+        <div class="number">01</div>
+        <h3>品牌强关联</h3>
+        <p>让消费者在提到直播间时，能够清晰地联想到品牌</p>
+      </div>
+      <div class="goal-card fade-in">
+        <div class="number">02</div>
+        <h3>传播破圈</h3>
+        <p>通过高品质内容制造话题，突破原有粉丝圈层</p>
+      </div>
+      <div class="goal-card fade-in">
+        <div class="number">03</div>
+        <h3>技术创新</h3>
+        <p>以AI技术赋能创意，实现降本增效与规模化产出</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WORKFLOW ==================== -->
+  <section class="section" id="workflow">
+    <div class="section-title fade-in">AI视频创作<em>工作流</em></div>
+    <div class="section-divider"></div>
+    <div class="section-subtitle fade-in">从灵感到成片 · 全链路AI赋能</div>
+
+    <div class="workflow-steps">
+      <div class="step-item fade-in">
+        <div class="step-num">01</div>
+        <div class="step-text">
+          <h4>角色与脚本</h4>
+          <p>AI辅助角色形象设计 + 故事脚本大纲生成</p>
+        </div>
+      </div>
+      <div class="step-item fade-in">
+        <div class="step-num">02</div>
+        <div class="step-text">
+          <h4>视觉规划表</h4>
+          <p>16:9电影制作板，统一镜头、色彩与环境风格</p>
+        </div>
+      </div>
+      <div class="step-item fade-in">
+        <div class="step-num">03</div>
+        <div class="step-text">
+          <h4>分镜生成</h4>
+          <p>AI按脚本自动生成分镜画面，把控叙事节奏</p>
+        </div>
+      </div>
+      <div class="step-item fade-in">
+        <div class="step-num">04</div>
+        <div class="step-text">
+          <h4>视频生成</h4>
+          <p>采用即梦、Seedance等工具，将分镜转化为动态影像</p>
+        </div>
+      </div>
+      <div class="step-item fade-in">
+        <div class="step-num">05</div>
+        <div class="step-text">
+          <h4>后期合成</h4>
+          <p>AI辅助剪辑、调色、音效匹配，提升成片质感</p>
+        </div>
+      </div>
+      <div class="step-item fade-in">
+        <div class="step-num">06</div>
+        <div class="step-text">
+          <h4>成本优化</h4>
+          <p>模型选型 + 成本控制策略，实现规模化产出</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== AIDA ==================== -->
+  <section class="section" id="aida">
+    <div class="section-title fade-in">创意<em>方法论</em></div>
+    <div class="section-divider"></div>
+    <div class="section-subtitle fade-in">AIDA法则 · 从注意到行动</div>
+    <div class="aida-grid">
+      <div class="aida-card fade-in">
+        <div class="letter">A</div>
+        <h4>引起注意</h4>
+        <p>通过强烈的视觉冲击或悬念，在第一秒留住观众</p>
+      </div>
+      <div class="aida-card fade-in">
+        <div class="letter">I</div>
+        <h4>激发兴趣</h4>
+        <p>提供有价值的信息，让故事产生代入感</p>
+      </div>
+      <div class="aida-card fade-in">
+        <div class="letter">D</div>
+        <h4>唤起欲望</h4>
+        <p>展示美好愿景，让观众渴望拥有</p>
+      </div>
+      <div class="aida-card fade-in">
+        <div class="letter">A</div>
+        <h4>促成行动</h4>
+        <p>给出明确的行动指令，完成互动闭环</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CASES ==================== -->
+  <section class="section" id="cases">
+    <div class="section-title fade-in">案例<em>实践</em></div>
+    <div class="section-divider"></div>
+    <div class="section-subtitle fade-in">AI驱动的品牌TVC落地案例</div>
+    <div class="cases-grid">
+      <div class="case-card fade-in">
+        <video autoplay muted loop playsinline poster="images/ppt_04.jpg">
+          <source src="videos/case-1.mp4" type="video/mp4">
+        </video>
+        <div class="case-overlay"></div>
+        <div class="case-content">
+          <div class="case-label">CASE 01</div>
+          <h3>西子湖畔 · 福利召唤</h3>
+          <p class="case-desc">新中式意境融合，白蛇传说与直播间福利的创意碰撞</p>
+        </div>
+      </div>
+      <div class="case-card fade-in">
+        <video autoplay muted loop playsinline poster="images/ppt_05.jpg">
+          <source src="videos/case-2.mp4" type="video/mp4">
+        </video>
+        <div class="case-overlay"></div>
+        <div class="case-content">
+          <div class="case-label">CASE 02</div>
+          <h3>十惠鸭 · 荷间寻惠</h3>
+          <p class="case-desc">水墨江南意境，十惠鸭泛舟西湖寻找福利的故事</p>
+        </div>
+      </div>
+      <div class="case-card fade-in">
+        <video autoplay muted loop playsinline poster="images/ppt_17.jpg">
+          <source src="videos/case-3.mp4" type="video/mp4">
+        </video>
+        <div class="case-overlay"></div>
+        <div class="case-content">
+          <div class="case-label">CASE 03</div>
+          <h3>湖畔端午 · 破五毒</h3>
+          <p class="case-desc">武侠风格创意，十惠鸭端午破五毒的趣味叙事</p>
+        </div>
+      </div>
+      <div class="case-card fade-in">
+        <video autoplay muted loop playsinline poster="images/ppt_06.png">
+          <source src="videos/case-4.mp4" type="video/mp4">
+        </video>
+        <div class="case-overlay"></div>
+        <div class="case-content">
+          <div class="case-label">CASE 04</div>
+          <h3>福利一出 · 十拿九稳</h3>
+          <p class="case-desc">趣味横生的福利叙事，建立品牌与消费者的情感连接</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== COST ==================== -->
+  <section class="section" id="cost">
+    <div class="section-title fade-in">模型与<em>成本</em></div>
+    <div class="section-divider"></div>
+    <div class="section-subtitle fade-in">核心模型选择 · 成本控制策略</div>
+    <div class="cost-grid">
+      <div class="cost-item fade-in">
+        <div class="cost-value">5x</div>
+        <div class="cost-label">制作效率提升</div>
+      </div>
+      <div class="cost-item fade-in">
+        <div class="cost-value">70%</div>
+        <div class="cost-label">成本降低</div>
+      </div>
+      <div class="cost-item fade-in">
+        <div class="cost-value">4K</div>
+        <div class="cost-label">高清画质输出</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <section class="section" id="footer">
+    <video class="video-bg" autoplay muted loop playsinline poster="images/poster-footer.jpg">
+      <source src="videos/footer-bg.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+    <div class="footer-text">
+      <h2 class="fade-in">我在<em>西子湖畔</em></h2>
+      <p class="fade-in">AI赋能品牌传播新纪元</p>
+      <br><br>
+      <p style="font-size:11px; color:rgba(240,237,232,0.2);">2026 · 湖畔直播间</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// Active nav dot tracking
+const container = document.getElementById('scrollContainer');
+const sections = document.querySelectorAll('.section');
+const dots = document.querySelectorAll('.nav-dots a');
+
+container.addEventListener('scroll', () => {
+  const scrollTop = container.scrollTop;
+  const containerHeight = container.clientHeight;
+  
+  sections.forEach((section, i) => {
+    const offset = section.offsetTop;
+    const height = section.offsetHeight;
+    if (scrollTop >= offset - containerHeight * 0.4 && 
+        scrollTop < offset + height - containerHeight * 0.4) {
+      dots.forEach(d => d.classList.remove('active'));
+      if (dots[i]) dots[i].classList.add('active');
+    }
+  });
+});
+
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Smooth scroll for nav dots
+dots.forEach(dot => {
+  dot.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(dot.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
