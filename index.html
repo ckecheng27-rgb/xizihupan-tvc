@@ -102,7 +102,7 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 <div class="video-overlay"></div>
 <div class="content fade-in">
 <div class="subtitle-top">AI &#183; CREATIVE &#183; STRATEGY</div>
-<h1><img src="images/logo.png" alt="我在西子湖畔" style="max-height:72px;max-width:90%;vertical-align:middle"></h1>
+<h1><img src="https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png" alt="我在西子湖畔" style="max-height:72px;max-width:90%;vertical-align:middle"></h1>
 <div class="subtitle">直播间TVC创意与AI实践方案</div>
 <div class="year">2026 &#183; 十惠鸭品牌</div>
 </div>
@@ -186,7 +186,7 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 <video class="video-bg" autoplay muted loop playsinline><source src="videos/footer-bg.mp4" type="video/mp4"></video>
 <div class="video-overlay"></div>
 <div class="footer-content fade-in">
-<h2><img src="images/logo.png" alt="我在西子湖畔" style="max-height:48px;max-width:80%;vertical-align:middle"></h2>
+<h2><img src="https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png" alt="我在西子湖畔" style="max-height:48px;max-width:80%;vertical-align:middle"></h2>
 <div class="footer-sub">十年深耕 &#183; 直播电商 AI 赋能</div>
 <div class="footer-links"><a href="https://github.com/ckecheng27-rgb/xizihupan-tvc" target="_blank">GitHub</a></div>
 <div class="copyright">&copy; 2026 十惠鸭品牌 &#183; 直播间TVC创意方案</div>
@@ -284,5 +284,42 @@ if(c.footer){
   var fc=document.querySelector('#footer .copyright');if(fc&&c.footer.copyright)fc.innerHTML=c.footer.copyright;
   var fv=document.querySelector('#footer .video-bg source');if(fv&&c.footer.video)fv.src=c.footer.video;
 }
-}catch(e){console.log('config error',e)}})();
-</script></body></html>
+}catch(e){console.log('config error',e)}
+// Also try loading from localStorage (set by admin.html)
+(function(){
+try{
+  var flat={};
+  // 1. Global XIZI_CONFIG
+  if(window.XIZI_CONFIG)Object.assign(flat,window.XIZI_CONFIG);
+  // 2. localStorage xizitvc_config (from admin.html)
+  var ls=localStorage.getItem('xizitvc_config');
+  if(ls)Object.assign(flat,JSON.parse(ls));
+  if(!Object.keys(flat).length)return;
+  // Apply flat config
+  if(flat.hero_logo){
+    var h1=document.querySelector('#hero h1');
+    if(h1)h1.innerHTML='<img src="'+flat.hero_logo+'" style="max-height:72px;max-width:90%;vertical-align:middle">';
+  }
+  if(flat.footer_logo){
+    var fh=document.querySelector('#footer h2');
+    if(fh)fh.innerHTML='<img src="'+flat.footer_logo+'" style="max-height:48px;max-width:80%;vertical-align:middle">';
+  }
+  if(flat.hero_subtitle){
+    var st=document.querySelector('#hero .subtitle');
+    if(st)st.textContent=flat.hero_subtitle;
+  }
+  if(flat.hero_year){
+    var yr=document.querySelector('#hero .year');
+    if(yr)yr.innerHTML=flat.hero_year;
+  }
+  if(flat.hero_video){
+    var hv=document.querySelector('#hero .video-bg source');
+    if(hv)hv.src='videos/'+flat.hero_video;
+  }
+}catch(e){console.log('flat cfg error',e)}
+})();
+</script>
+<div style="position:fixed;bottom:20px;right:20px;z-index:9999;opacity:.15;transition:opacity .3s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.15">
+  <a href="admin.html" target="_blank" style="color:#c9a84c;text-decoration:none;font-size:11px;letter-spacing:1px;background:rgba(0,0,0,.6);padding:6px 12px;border-radius:4px;border:1px solid rgba(201,168,76,.2)">⚙ 管理</a>
+</div>
+</body></html>

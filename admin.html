@@ -9,322 +9,388 @@ body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0a0a0a;color
 h1{font-size:28px;font-weight:200;letter-spacing:3px;margin-bottom:8px}
 h1 strong{font-weight:400;color:#c9a84c}
 .sub{font-size:12px;color:rgba(240,237,232,.3);letter-spacing:2px;margin-bottom:40px}
-.section-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.015);margin-bottom:20px;padding:20px 24px}
-.section-card h2{font-size:14px;font-weight:300;letter-spacing:2px;color:#c9a84c;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(201,168,76,.15)}
+.section-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.015);margin-bottom:20px;padding:20px 24px;border-radius:8px}
+.section-card h2{font-size:14px;font-weight:300;letter-spacing:2px;color:#c9a84c;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
 .field{margin-bottom:14px}
-.field label{display:block;font-size:11px;letter-spacing:1px;color:rgba(240,237,232,.4);margin-bottom:4px}
-.field input,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#f0ede8;padding:8px 12px;font-size:13px;font-family:inherit;transition:border .3s}
-.field input:focus,.field textarea:focus{outline:none;border-color:#c9a84c}
-.field textarea{resize:vertical;min-height:50px;line-height:1.6}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn-group{display:flex;gap:12px;margin:30px 0;flex-wrap:wrap}
-.btn{padding:10px 28px;border:1px solid #c9a84c;background:transparent;color:#c9a84c;font-size:13px;letter-spacing:2px;cursor:pointer;transition:all .3s}
-.btn:hover{background:#c9a84c;color:#0a0a0a}
-.btn-primary{background:#c9a84c;color:#0a0a0a}
-.btn-primary:hover{background:transparent;color:#c9a84c}
-.btn-danger{border-color:rgba(255,80,80,.4);color:rgba(255,80,80,.7)}
-.btn-danger:hover{background:rgba(255,80,80,.1);border-color:rgba(255,80,80,.6)}
-.toast{position:fixed;top:20px;right:20px;padding:12px 24px;background:#c9a84c;color:#0a0a0a;font-size:13px;letter-spacing:1px;opacity:0;transform:translateY(-20px);transition:all .4s;z-index:999}
-.toast.show{opacity:1;transform:translateY(0)}
-.full-btn{width:100%;text-align:center;padding:14px;margin-top:8px}
-pre{font-size:11px;color:rgba(240,237,232,.3);margin-top:20px;padding:12px;background:rgba(255,255,255,.02);max-height:200px;overflow:auto}
-@media(max-width:720px){.field-row{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;color:rgba(240,237,232,.4);letter-spacing:1px;margin-bottom:4px}
+.field input,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#f0ede8;padding:8px 12px;font-size:13px;border-radius:4px;outline:none;transition:border .2s}
+.field input:focus,.field textarea:focus{border-color:#c9a84c}
+.field textarea{resize:vertical;min-height:50px;font-family:inherit}
+.field textarea.tall{min-height:120px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.row{grid-template-columns:1fr}}
+.btn-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.btn{padding:10px 28px;border:none;border-radius:4px;font-size:13px;letter-spacing:1px;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}
+.btn-primary{background:#c9a84c;color:#0a0a0a;font-weight:500}
+.btn-danger{background:#8b3a3a;color:#f0ede8}
+.btn-outline{background:transparent;border:1px solid rgba(255,255,255,.15);color:#f0ede8}
+.toast{position:fixed;top:20px;right:20px;background:#1a1a1a;border:1px solid rgba(201,168,76,.3);padding:12px 24px;border-radius:6px;font-size:13px;color:#c9a84c;opacity:0;transition:opacity .4s;z-index:1000}
+.toast.show{opacity:1}
+.vid-preview{font-size:11px;color:rgba(240,237,232,.3);margin-top:4px}
+.preview-link{color:#c9a84c;text-decoration:none;font-size:11px}
+.preview-link:hover{text-decoration:underline}
+.tabs{display:flex;gap:2px;margin-bottom:24px;flex-wrap:wrap}
+.tab{padding:8px 18px;font-size:12px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(240,237,232,.4);cursor:pointer;border-radius:4px 4px 0 0;letter-spacing:1px}
+.tab.active{background:rgba(201,168,76,.08);border-color:#c9a84c;color:#c9a84c}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.footer-note{margin-top:40px;font-size:11px;color:rgba(240,237,232,.2);text-align:center;letter-spacing:1px}
 </style>
 </head>
 <body>
 <h1>内容<strong>管理</strong></h1>
-<div class="sub">修改文字和视频路径，保存后刷新主页面即可生效</div>
+<div class="sub">西子湖畔TVC · 交互展示后台 · 修改后自动保存到浏览器</div>
 
-<div id="app"></div>
-
-<div class="btn-group">
-<button class="btn btn-primary" onclick="saveConfig()">&#x2714; 保存配置</button>
-<button class="btn" onclick="previewConfig()">&#x1F50D; 预览配置</button>
-<button class="btn btn-danger" onclick="resetConfig()">&#x21BA; 恢复默认</button>
+<div class="tabs" id="tabs">
+  <button class="tab active" data-tab="hero">首页</button>
+  <button class="tab" data-tab="cases">案例</button>
+  <button class="tab" data-tab="videos">视频</button>
+  <button class="tab" data-tab="other">其他</button>
 </div>
-<pre id="preview"></pre>
 
-<div id="toast" class="toast"></div>
+<div class="tab-panel active" id="panel-hero">
+  <div class="section-card">
+    <h2>🏠 首页 (Hero)</h2>
+    <div class="field">
+      <label>Logo图片 (留空用默认文字标题)</label>
+      <input type="text" id="hero_logo" value="https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png" placeholder="images/logo.png 或 http://...">
+      <div style="margin-top:6px" id="hero_logo_preview"></div>
+    </div>
+    <div class="field">
+      <label>副标题</label>
+      <input type="text" id="hero_subtitle" value="直播间TVC创意与AI实践方案">
+    </div>
+    <div class="field">
+      <label>顶部标签</label>
+      <input type="text" id="hero_tag" value="AI · CREATIVE · STRATEGY">
+    </div>
+    <div class="field">
+      <label>年份/品牌</label>
+      <input type="text" id="hero_year" value="2026 · 十惠鸭品牌">
+    </div>
+    <div class="field">
+      <label>视频路径 (videos/ 下)</label>
+      <input type="text" id="hero_video" value="hero-bg.mp4">
+    </div>
+  </div>
+  <div class="section-card">
+    <h2>🏁 尾页 (Footer)</h2>
+    <div class="field">
+      <label>Logo图片 (留空用默认文字标题)</label>
+      <input type="text" id="footer_logo" value="" placeholder="images/logo.png 或 http://...">
+      <div style="margin-top:6px" id="footer_logo_preview"></div>
+    </div>
+    <div class="field">
+      <label>副文本</label>
+      <input type="text" id="footer_text" value="十惠鸭品牌 · 直播电商 AI 赋能">
+    </div>
+    <div class="field">
+      <label>视频路径</label>
+      <input type="text" id="footer_video" value="footer-bg.mp4">
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-cases">
+  <div class="section-card">
+    <h2>CASE 01 · 西子湖畔 · 福利召唤</h2>
+    <div class="field">
+      <label>视频路径</label>
+      <input type="text" id="case1_video" value="videos/case-1.mp4">
+    </div>
+    <div class="field">
+      <label>案例描述</label>
+      <textarea id="case1_desc" class="tall">新中式意境融合，白蛇传说与直播间福利的创意碰撞</textarea>
+    </div>
+    <div class="field">
+      <label>核心创意</label>
+      <textarea id="case1_idea" class="tall">以"十惠鸭"IP串联品牌福利，通过山巅召唤、金色粒子特效等视觉语言，将品牌福利具象化。AIDA模型驱动：Attention（水墨山巅奇观）→ Interest（金色"惠"字符号）→ Desire（福利场景蒙太奇）→ Action（直播间入口引导）</textarea>
+    </div>
+    <div class="field">
+      <label>分镜脚本（每行一个：时间|描述）</label>
+      <textarea id="case1_shots" class="tall">0-4s|【开篇】大远景推镜，山峦层叠青绿山水，十惠鸭立于山巅。水墨质感，金色阳光穿透云缝。祥云飘动+金色粒子汇聚。空灵竹笛渐入。
+5-9s|【推进】推镜至十惠鸭特写，瞳孔中倒映万千金色"惠"字符号。暖金色调流光溢彩。古筝急弦+铜铃声。
+10-16s|【高潮】蒙太奇切换，十惠鸭振翅，金色"惠"字符号如浪潮涌向屏幕。画面分割为福利场景。粒子爆炸，交响乐渐强。
+16-20s|【收尾】镜头回到十惠鸭张开翅膀，背后金色"惠"字展开，直播间界面浮现。金色粒子汇聚成"西子湖畔直播间"字样。</textarea>
+    </div>
+    <div class="row">
+      <div class="field"><label>A - 引起注意</label><input type="text" id="case1_a" value="水墨山巅+十惠鸭剪影，第一秒抓住眼球"></div>
+      <div class="field"><label>I - 激发兴趣</label><input type="text" id="case1_i" value="金色惠字符号与十惠鸭瞳孔中的倒影"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>D - 唤起欲望</label><input type="text" id="case1_d" value="福利场景蒙太奇，红包折扣赠品扑面而来"></div>
+      <div class="field"><label>A - 促成行动</label><input type="text" id="case1_a2" value=""上十惠鸭，领福利"画外音引导"></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>CASE 02 · 十惠鸭 · 荷间寻惠</h2>
+    <div class="field">
+      <label>视频路径</label>
+      <input type="text" id="case2_video" value="videos/case-2.mp4">
+    </div>
+    <div class="field">
+      <label>案例描述</label>
+      <textarea id="case2_desc" class="tall">白蛇传说反转，十惠鸭破局福利大爆发</textarea>
+    </div>
+    <div class="field">
+      <label>核心创意</label>
+      <textarea id="case2_idea" class="tall">借用白蛇传经典IP，以"危机→反转→爆发"叙事结构制造反差惊喜。AIDA模型驱动：Attention（烟雨西湖+白蛇危机）→ Interest（白蛇吞鸭的戏剧性反转）→ Desire（万千红包从天而降）→ Action（福利视觉冲击引导行动）</textarea>
+    </div>
+    <div class="field">
+      <label>分镜脚本</label>
+      <textarea id="case2_shots" class="tall">0-6s|【烟雨闲韵】全景横移，十惠鸭泛舟碧波，远山淡影江南烟雨。雨滴声+轻柔琵琶曲。
+6-10s|【危机降临】中景快速推镜，湖面漩涡中白蛇身影浮现，逼近十惠鸭。琵琶曲转急促。
+10-11s|【反转破局】特写极速切换，白蛇一口吞下十惠鸭，水面恢复平静。吞咽声+心跳暂停。
+11-15s|【福利爆发】远景快速拉远，十惠鸭冲破白蛇肚皮，白蛇裂开化作万千红包从天而降。电子音乐+欢呼声。</textarea>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>CASE 03 · 湖畔端午 · 破五毒</h2>
+    <div class="field">
+      <label>视频路径</label>
+      <input type="text" id="case3_video" value="videos/case-3.mp4">
+    </div>
+    <div class="field">
+      <label>案例描述</label>
+      <textarea id="case3_desc" class="tall">水墨武侠风格，端午民俗与品牌IP的创意融合</textarea>
+    </div>
+    <div class="field">
+      <label>核心创意</label>
+      <textarea id="case3_idea" class="tall">以武侠叙事融合端午"破五毒"民俗，打造江湖感品牌短片。6个关键帧构建完整叙事弧：画卷入画→水墨穿越→江湖对峙→眼神特写→红包亮相→福运爆发。AI分镜公式确保每帧都有明确的功能定位。</textarea>
+    </div>
+    <div class="field">
+      <label>关键帧（每行一个：KF编号|描述）</label>
+      <textarea id="case3_shots" class="tall">KF 1|【画卷入画】古风卷轴展开，水墨西湖美景
+KF 2|【水墨穿越】十惠鸭从画卷中飞出，穿越水墨山水
+KF 3|【江湖对峙】五毒（蛇/蝎/蜈蚣/壁虎/蟾蜍）现身，与十惠鸭对峙
+KF 4|【眼神特写】十惠鸭眼神坚定，蓄势待发
+KF 5|【红包亮相】十惠鸭振翅，金色红包如暗器四射
+KF 6|【福运爆发】五毒退散，"端午安康"字样浮现，福利爆发</textarea>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <h2>CASE 04 · 福利一出 · 十拿九稳</h2>
+    <div class="field">
+      <label>视频路径</label>
+      <input type="text" id="case4_video" value="videos/case-4.mp4">
+    </div>
+    <div class="field">
+      <label>案例描述</label>
+      <textarea id="case4_desc" class="tall">反差幽默，钓鱼梗与红包福利的惊喜结合</textarea>
+    </div>
+    <div class="field">
+      <label>核心创意</label>
+      <textarea id="case4_idea" class="tall">以"钓鱼"为创意核心，通过反差幽默制造记忆点。AIDA模型：Attention（西湖晨起钓鱼的宁静）→ Interest（"空军"的失落与水下巨龙的反转）→ Desire（红包打窝的视觉奇观）→ Action（"上十惠鸭"的社交裂变引导）</textarea>
+    </div>
+    <div class="field">
+      <label>分镜脚本</label>
+      <textarea id="case4_shots" class="tall">0-3s|【西湖晨起】全景，西湖晨曦，十惠鸭悠闲钓鱼。鸟鸣+轻音乐。
+4-9s|【等待无果】中景，十惠鸭频频看浮漂，一无所获，表情失落。音效渐弱。
+10-12s|【水下冷暴击】水下镜头，巨大阴影逼近，气泡翻涌。心跳声+低音轰鸣。
+13-15s|【灵光乍现】特写，十惠鸭恍然大悟，拿出"福利红包"挂在鱼钩上。轻快音效。
+16-19s|【红包打窝】中景，十惠鸭甩竿，红包入水，水面下金光炸裂。音乐渐强。
+20-23s|【高潮爆发】远景+快速上升，水面炸开，无数红包从水下喷涌而出，十惠鸭站在红包堆上。交响乐高潮+笑声。</textarea>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-videos">
+  <div class="section-card">
+    <h2>🎬 视频管理</h2>
+    <p style="font-size:12px;color:rgba(240,237,232,.4);margin-bottom:16px">视频文件需通过Git上传到 videos/ 目录。这里仅修改引用路径。</p>
+    <div class="row">
+      <div class="field"><label>首页视频</label><input type="text" id="vid_hero" value="hero-bg.mp4"></div>
+      <div class="field"><label>尾页视频</label><input type="text" id="vid_footer" value="footer-bg.mp4"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>案例一视频</label><input type="text" id="vid_case1" value="case-1.mp4"></div>
+      <div class="field"><label>案例二视频</label><input type="text" id="vid_case2" value="case-2.mp4"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>案例三视频</label><input type="text" id="vid_case3" value="case-3.mp4"></div>
+      <div class="field"><label>案例四视频</label><input type="text" id="vid_case4" value="case-4.mp4"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-other">
+  <div class="section-card">
+    <h2>📖 关于方案 (About)</h2>
+    <div class="field"><label>标题</label><input type="text" id="about_title" value="AI赋能品牌传播新纪元"></div>
+    <div class="field"><label>正文</label><textarea id="about_text" class="tall">本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。</textarea></div>
+  </div>
+  <div class="section-card">
+    <h2>💡 核心创意</h2>
+    <div class="field"><label>标题</label><input type="text" id="concept_title" value="AIDA法则驱动的品牌叙事模型"></div>
+    <div class="row">
+      <div class="field"><label>亮点1 标题</label><input type="text" id="c1_title" value="品牌强关联"></div>
+      <div class="field"><label>亮点1 描述</label><input type="text" id="c1_desc" value="让消费者在提到直播间时，清晰地联想到品牌"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>亮点2 标题</label><input type="text" id="c2_title" value="传播破圈"></div>
+      <div class="field"><label>亮点2 描述</label><input type="text" id="c2_desc" value="借势端午、白蛇传等热门IP话题，引爆社交传播"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>亮点3 标题</label><input type="text" id="c3_title" value="技术创新"></div>
+      <div class="field"><label>亮点3 描述</label><input type="text" id="c3_desc" value="AI全链路辅助创作，从脚本文稿到视觉生成再到视频合成"></div>
+    </div>
+  </div>
+  <div class="section-card">
+    <h2>🔧 技术实现</h2>
+    <div class="field"><label>标题</label><input type="text" id="tech_title" value="AI视频创作全流程"></div>
+    <div class="row">
+      <div class="field"><label>环节1</label><input type="text" id="t1" value="ChatGPT · 脚本生成"></div>
+      <div class="field"><label>环节2</label><input type="text" id="t2" value="Midjourney · 视觉设计"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>环节3</label><input type="text" id="t3" value="Runway · 视频生成"></div>
+      <div class="field"><label>环节4</label><input type="text" id="t4" value="剪映 · 剪辑合成"></div>
+    </div>
+  </div>
+  <div class="section-card">
+    <h2>📊 数据效果</h2>
+    <div class="row">
+      <div class="field"><label>数据1 数字</label><input type="text" id="d1_num" value="4"></div>
+      <div class="field"><label>数据1 标签</label><input type="text" id="d1_label" value="支TVC成片"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>数据2 数字</label><input type="text" id="d2_num" value="90%"></div>
+      <div class="field"><label>数据2 标签</label><input type="text" id="d2_label" value="成本降低"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>数据3 数字</label><input type="text" id="d3_num" value="3-5"></div>
+      <div class="field"><label>数据3 标签</label><input type="text" id="d3_label" value="天制作周期"></div>
+    </div>
+  </div>
+</div>
+
+<div class="btn-row">
+  <button class="btn btn-primary" onclick="saveConfig()">💾 保存配置</button>
+  <button class="btn btn-outline" onclick="exportConfig()">📤 导出配置</button>
+  <button class="btn btn-outline" onclick="resetConfig()">↺ 恢复默认</button>
+  <button class="btn btn-outline" onclick="window.open('./','_blank')">👁 预览页面</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="footer-note">配置保存在浏览器 localStorage 中 · 导出后可通过 _config.js 部署到GitHub</div>
 
 <script>
 // Default config
-var DEFAULT = {
-  hero: {
-    logo: '',
-    subtitle: '直播间TVC创意与AI实践方案',
-    year: '2026 &#183; 十惠鸭品牌',
-    video: 'videos/hero-bg.mp4'
-  },
-  about: {
-    title: '关于方案',
-    text: 'AI赋能品牌传播新纪元。本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。',
-    video: 'videos/hero-bg.mp4'
-  },
-  concept: {
-    title: '核心创意',
-    subtitle: 'AIDA法则驱动的品牌叙事模型',
-    items: [
-      {num:'A',title:'引起注意',desc:'强烈的视觉冲击或悬念，在第一秒留住观众'},
-      {num:'I',title:'激发兴趣',desc:'结合观众痛点，让故事产生代入感'},
-      {num:'D',title:'唤起欲望',desc:'展示美好愿景，让观众渴望拥有'},
-      {num:'A',title:'促成行动',desc:'明确的行动指令，完成互动闭环'}
-    ],
-    video: 'videos/case-2.mp4'
-  },
-  highlights: {
-    title: '方案亮点',
-    items: [
-      {num:'01',title:'AI全流程创作',desc:'从剧本到成片，Midjourney + Runway实现"所想即所得"'},
-      {num:'02',title:'AI分镜提示词公式',desc:'【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】'},
-      {num:'03',title:'统一IP视觉体系',desc:'"十惠鸭"贯穿四个案例，打造品牌记忆锚点'},
-      {num:'04',title:'低成本高效率',desc:'成本仅为传统TVC的5%-10%，迭代速度快'}
-    ],
-    video: 'videos/case-4.mp4'
-  },
-  cases: [
-    {num:'CASE 01',title:'西子湖畔 &#183; 福利召唤',desc:'新中式意境融合，白蛇传说与直播间福利的创意碰撞',video:'videos/case-1.mp4',coreIdea:'新中式意境融合。通过十惠鸭IP与白蛇传说的创意碰撞，将品牌福利召唤与东方美学深度融合。'},
-    {num:'CASE 02',title:'十惠鸭 &#183; 荷间寻惠',desc:'水墨江南意境，十惠鸭泛舟西湖寻找福利的故事',video:'videos/case-2.mp4',coreIdea:'水墨江南·白蛇反转。借用白蛇传IP，十惠鸭被白蛇吞下后破肚而出，福利如天女散花。'},
-    {num:'CASE 03',title:'湖畔端午 &#183; 破五毒',desc:'武侠风格创意，十惠鸭端午破五毒的趣味叙事',video:'videos/case-3.mp4',coreIdea:'武侠风格·端午破五毒。十惠鸭化身江湖侠客，红包退敌福运满屏。'},
-    {num:'CASE 04',title:'福利一出 &#183; 十拿九稳',desc:'趣味横生的福利叙事，建立品牌与消费者的情感连接',video:'videos/case-4.mp4',coreIdea:'反差幽默·钓鱼梗。十惠鸭苦等无果，用红包打窝，鱼群疯狂抢食。'}
-  ],
-  tech: {
-    title: '技术实现',
-    items: [
-      {title:'AI剧本生成',desc:'ChatGPT / 通义千问'},
-      {title:'概念视觉化',desc:'Midjourney v6'},
-      {title:'视频生成',desc:'Runway Gen-3 / Pika'},
-      {title:'后期合成',desc:'剪映专业版'}
-    ],
-    video: 'videos/case-3.mp4'
-  },
-  data: {
-    title: '数据效果',
-    items: [
-      {num:'4支',title:'TVC创意短片',desc:'全AI辅助制作'},
-      {num:'90%',title:'成本降低',desc:'相比传统TVC方案'},
-      {num:'3-5天',title:'单支制作周期',desc:'从创意到成片'},
-      {num:'2周',title:'全案交付',desc:'多版本快速迭代'}
-    ],
-    video: 'videos/footer-bg.mp4'
-  },
-  footer: {
-    logo: '',
-    subtitle: '十年深耕 &#183; 直播电商 AI 赋能',
-    copyright: '&copy; 2026 十惠鸭品牌 &#183; 直播间TVC创意方案',
-    video: 'videos/footer-bg.mp4'
-  }
+const DEFAULTS = {
+  hero_logo:'https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png',hero_subtitle:'直播间TVC创意与AI实践方案',
+  hero_tag:'AI · CREATIVE · STRATEGY',hero_year:'2026 · 十惠鸭品牌',
+  hero_video:'hero-bg.mp4',footer_logo:'',
+  footer_text:'十惠鸭品牌 · 直播电商 AI 赋能',footer_video:'footer-bg.mp4',
+  about_title:'AI赋能品牌传播新纪元',
+  about_text:'本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。',
+  concept_title:'AIDA法则驱动的品牌叙事模型',
+  c1_title:'品牌强关联',c1_desc:'让消费者在提到直播间时，清晰地联想到品牌',
+  c2_title:'传播破圈',c2_desc:'借势端午、白蛇传等热门IP话题，引爆社交传播',
+  c3_title:'技术创新',c3_desc:'AI全链路辅助创作，从脚本文稿到视觉生成再到视频合成',
+  tech_title:'AI视频创作全流程',
+  t1:'ChatGPT · 脚本生成',t2:'Midjourney · 视觉设计',t3:'Runway · 视频生成',t4:'剪映 · 剪辑合成',
+  d1_num:'4',d1_label:'支TVC成片',d2_num:'90%',d2_label:'成本降低',d3_num:'3-5',d3_label:'天制作周期',
+  case1_video:'videos/case-1.mp4',case1_desc:'新中式意境融合，白蛇传说与直播间福利的创意碰撞',
+  case1_idea:'以"十惠鸭"IP串联品牌福利...',
+  case1_shots:'0-4s|开篇...',
+  case1_a:'水墨山巅+十惠鸭剪影',case1_i:'金色惠字符号',case1_d:'福利场景蒙太奇',case1_a2:'画外音引导',
+  case2_video:'videos/case-2.mp4',case2_desc:'白蛇传说反转，十惠鸭破局福利大爆发',
+  case2_idea:'借用白蛇传经典IP...',
+  case2_shots:'0-6s|烟雨闲韵...',
+  case3_video:'videos/case-3.mp4',case3_desc:'水墨武侠风格，端午民俗与品牌IP的创意融合',
+  case3_idea:'以武侠叙事融合端午...',
+  case3_shots:'KF 1|画卷入画...',
+  case4_video:'videos/case-4.mp4',case4_desc:'反差幽默，钓鱼梗与红包福利的惊喜结合',
+  case4_idea:'以"钓鱼"为创意核心...',
+  case4_shots:'0-3s|西湖晨起...'
 };
 
-var CONFIG = loadConfig();
+function showToast(msg,ok=true){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.color=ok?'#c9a84c':'#e06060';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function showLogoPreview(id){
+  const el=document.getElementById(id);
+  const pre=document.getElementById(id+'_preview');
+  if(!el||!pre)return;
+  const v=el.value.trim();
+  if(v){
+    pre.innerHTML='<img src="'+v.replace(/"/g,'&quot;')+'" style="max-height:48px;max-width:200px;border-radius:4px;opacity:.85" onerror="this.parentNode.innerHTML=\'<span style=color:#e06060;font-size:11px>✕ 图片加载失败</span>\'">';
+  }else{
+    pre.innerHTML='';
+  }
+}
 
 function loadConfig(){
   try{
-    var s=localStorage.getItem('xizihupan_config');
-    if(s) return JSON.parse(s);
+    const d=JSON.parse(localStorage.getItem('xizitvc_config')||'{}');
+    Object.keys(DEFAULTS).forEach(k=>{
+      const el=document.getElementById(k);
+      if(el&&d[k]!==undefined) el.value=d[k];
+    });
+    showLogoPreview('hero_logo');
+    showLogoPreview('footer_logo');
   }catch(e){}
-  return JSON.parse(JSON.stringify(DEFAULT));
 }
 
 function saveConfig(){
-  collectForm();
-  localStorage.setItem('xizihupan_config', JSON.stringify(CONFIG));
-  showToast('&#x2714; 配置已保存！刷新主页面查看效果');
+  const cfg={};
+  Object.keys(DEFAULTS).forEach(k=>{
+    const el=document.getElementById(k);
+    if(el) cfg[k]=el.value;
+  });
+  localStorage.setItem('xizitvc_config',JSON.stringify(cfg));
+  showLogoPreview('hero_logo');
+  showLogoPreview('footer_logo');
+  showToast('✅ 配置已保存到浏览器！');
+}
+
+function exportConfig(){
+  const cfg={};
+  Object.keys(DEFAULTS).forEach(k=>{
+    const el=document.getElementById(k);
+    if(el) cfg[k]=el.value;
+  });
+  const blob=new Blob(['// 西子湖畔TVC后台配置\n// 将此文件放入项目根目录，index.html会自动读取\nconst XIZI_CONFIG='+JSON.stringify(cfg,null,2)+';'],{type:'text/javascript'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='_config.js';
+  a.click();
+  showToast('📤 已导出 _config.js，可部署到GitHub');
 }
 
 function resetConfig(){
-  if(!confirm('确定恢复默认配置？')) return;
-  localStorage.removeItem('xizihupan_config');
-  CONFIG = JSON.parse(JSON.stringify(DEFAULT));
-  render();
-  showToast('&#x21BA; 已恢复默认配置');
+  if(!confirm('恢复默认配置？当前修改会丢失。')) return;
+  Object.keys(DEFAULTS).forEach(k=>{
+    const el=document.getElementById(k);
+    if(el) el.value=DEFAULTS[k];
+  });
+  localStorage.removeItem('xizitvc_config');
+  showToast('↺ 已恢复默认配置');
 }
 
-function collectForm(){
-  // Hero
-  CONFIG.hero.logo = document.getElementById('hero_logo').value;
-  CONFIG.hero.subtitle = document.getElementById('hero_subtitle').value;
-  CONFIG.hero.year = document.getElementById('hero_year').value;
-  CONFIG.hero.video = document.getElementById('hero_video').value;
-  
-  // About
-  CONFIG.about.title = document.getElementById('about_title').value;
-  CONFIG.about.text = document.getElementById('about_text').value;
-  CONFIG.about.video = document.getElementById('about_video').value;
-  
-  // Concept
-  var ci = CONFIG.concept.items;
-  for(var i=0;i<ci.length;i++){
-    ci[i].title = document.getElementById('concept_t'+i).value;
-    ci[i].desc = document.getElementById('concept_d'+i).value;
-  }
-  CONFIG.concept.video = document.getElementById('concept_video').value;
-  
-  // Highlights
-  var hi = CONFIG.highlights.items;
-  for(var i=0;i<hi.length;i++){
-    hi[i].title = document.getElementById('hl_t'+i).value;
-    hi[i].desc = document.getElementById('hl_d'+i).value;
-  }
-  CONFIG.highlights.video = document.getElementById('hl_video').value;
-  
-  // Cases
-  for(var i=0;i<4;i++){
-    CONFIG.cases[i].title = document.getElementById('case_title_'+i).value;
-    CONFIG.cases[i].desc = document.getElementById('case_desc_'+i).value;
-    CONFIG.cases[i].video = document.getElementById('case_video_'+i).value;
-    CONFIG.cases[i].coreIdea = document.getElementById('case_idea_'+i).value;
-  }
-  
-  // Tech
-  var ti = CONFIG.tech.items;
-  for(var i=0;i<ti.length;i++){
-    ti[i].title = document.getElementById('tech_t'+i).value;
-    ti[i].desc = document.getElementById('tech_d'+i).value;
-  }
-  CONFIG.tech.video = document.getElementById('tech_video').value;
-  
-  // Data
-  var di = CONFIG.data.items;
-  for(var i=0;i<di.length;i++){
-    di[i].title = document.getElementById('data_t'+i).value;
-    di[i].desc = document.getElementById('data_d'+i).value;
-  }
-  CONFIG.data.video = document.getElementById('data_video').value;
-  
-  // Footer
-  CONFIG.footer.logo = document.getElementById('footer_logo').value;
-  CONFIG.footer.subtitle = document.getElementById('footer_sub').value;
-  CONFIG.footer.copyright = document.getElementById('footer_cr').value;
-  CONFIG.footer.video = document.getElementById('footer_video').value;
-}
+// Tabs
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('panel-'+this.dataset.tab).classList.add('active');
+  });
+});
 
-function showToast(msg){
-  var t=document.getElementById('toast');
-  t.innerHTML=msg;
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show')},2500);
-}
-
-function previewConfig(){
-  collectForm();
-  document.getElementById('preview').textContent = JSON.stringify(CONFIG, null, 2);
-}
-
-function escHtml(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function render(){
-  var c=CONFIG;
-  var h='';
-  
-  // Hero
-  h+=section('首页 Hero',[
-    fieldImg('Logo图片 (PNG路径)','hero_logo',c.hero.logo),
-    field('副标题','hero_subtitle',c.hero.subtitle),
-    field('年份/品牌','hero_year',c.hero.year),
-    fieldV('视频路径','hero_video',c.hero.video)
-  ]);
-  
-  h+=section('关于方案',[
-    field('标题','about_title',c.about.title),
-    textarea('正文','about_text',c.about.text),
-    fieldV('视频路径','about_video',c.about.video)
-  ]);
-  
-  h+=section('核心创意 (AIDA)',[
-    fieldRow([
-      {l:'A标题',id:'concept_t0',v:c.concept.items[0].title},
-      {l:'A描述',id:'concept_d0',v:c.concept.items[0].desc}
-    ]),
-    fieldRow([
-      {l:'I标题',id:'concept_t1',v:c.concept.items[1].title},
-      {l:'I描述',id:'concept_d1',v:c.concept.items[1].desc}
-    ]),
-    fieldRow([
-      {l:'D标题',id:'concept_t2',v:c.concept.items[2].title},
-      {l:'D描述',id:'concept_d2',v:c.concept.items[2].desc}
-    ]),
-    fieldRow([
-      {l:'A2标题',id:'concept_t3',v:c.concept.items[3].title},
-      {l:'A2描述',id:'concept_d3',v:c.concept.items[3].desc}
-    ]),
-    fieldV('视频路径','concept_video',c.concept.video)
-  ]);
-  
-  h+=section('方案亮点',[
-    fieldRow([{l:'01标题',id:'hl_t0',v:c.highlights.items[0].title},{l:'01描述',id:'hl_d0',v:c.highlights.items[0].desc}]),
-    fieldRow([{l:'02标题',id:'hl_t1',v:c.highlights.items[1].title},{l:'02描述',id:'hl_d1',v:c.highlights.items[1].desc}]),
-    fieldRow([{l:'03标题',id:'hl_t2',v:c.highlights.items[2].title},{l:'03描述',id:'hl_d2',v:c.highlights.items[2].desc}]),
-    fieldRow([{l:'04标题',id:'hl_t3',v:c.highlights.items[3].title},{l:'04描述',id:'hl_d3',v:c.highlights.items[3].desc}]),
-    fieldV('视频路径','hl_video',c.highlights.video)
-  ]);
-  
-  for(var i=0;i<4;i++){
-    var cc=c.cases[i];
-    h+=section('案例 '+(i+1)+' - '+cc.title,[
-      field('案例标题','case_title_'+i,cc.title),
-      textarea('描述','case_desc_'+i,cc.desc),
-      textarea('核心创意','case_idea_'+i,cc.coreIdea),
-      fieldV('视频路径','case_video_'+i,cc.video)
-    ]);
-  }
-  
-  h+=section('技术实现',[
-    fieldRow([{l:'工具1',id:'tech_t0',v:c.tech.items[0].title},{l:'说明1',id:'tech_d0',v:c.tech.items[0].desc}]),
-    fieldRow([{l:'工具2',id:'tech_t1',v:c.tech.items[1].title},{l:'说明2',id:'tech_d1',v:c.tech.items[1].desc}]),
-    fieldRow([{l:'工具3',id:'tech_t2',v:c.tech.items[2].title},{l:'说明3',id:'tech_d2',v:c.tech.items[2].desc}]),
-    fieldRow([{l:'工具4',id:'tech_t3',v:c.tech.items[3].title},{l:'说明4',id:'tech_d3',v:c.tech.items[3].desc}]),
-    fieldV('视频路径','tech_video',c.tech.video)
-  ]);
-  
-  h+=section('数据效果',[
-    fieldRow([{l:'指标1',id:'data_t0',v:c.data.items[0].title},{l:'说明1',id:'data_d0',v:c.data.items[0].desc}]),
-    fieldRow([{l:'指标2',id:'data_t1',v:c.data.items[1].title},{l:'说明2',id:'data_d1',v:c.data.items[1].desc}]),
-    fieldRow([{l:'指标3',id:'data_t2',v:c.data.items[2].title},{l:'说明3',id:'data_d2',v:c.data.items[2].desc}]),
-    fieldRow([{l:'指标4',id:'data_t3',v:c.data.items[3].title},{l:'说明3',id:'data_d3',v:c.data.items[3].desc}]),
-    fieldV('视频路径','data_video',c.data.video)
-  ]);
-  
-  h+=section('Footer',[
-    fieldImg('Logo图片','footer_logo',c.footer.logo),
-    field('副标题','footer_sub',c.footer.subtitle),
-    textarea('版权信息','footer_cr',c.footer.copyright),
-    fieldV('视频路径','footer_video',c.footer.video)
-  ]);
-  
-  document.getElementById('app').innerHTML = h;
-}
-
-function section(title, fields){
-  var f=fields.join('\n');
-  return '<div class="section-card"><h2>'+title+'</h2>'+f+'</div>';
-}
-
-function field(label,id,val){
-  return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'"></div>';
-}
-
-function textarea(label,id,val){
-  return '<div class="field"><label>'+label+'</label><textarea id="'+id+'">'+escHtml(val||'')+'</textarea></div>';
-}
-
-function fieldV(label,id,val){
-  return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'" style="color:#c9a84c;font-family:monospace"></div>';
-}
-function fieldImg(label,id,val){
-  var imgHtml='';
-  if(val) imgHtml='<div style="margin-top:6px;background:rgba(255,255,255,.03);padding:8px;border:1px solid rgba(255,255,255,.06);text-align:center"><img src="'+escHtml(val)+'" style="max-height:60px;max-width:200px;opacity:.8"></div>';
-  return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'" placeholder="images/logo.png 或 http://... " style="color:#c9a84c;font-family:monospace">'+imgHtml+'</div>';
-}
-
-function fieldRow(pair){
-  return '<div class="field-row">'+
-    '<div class="field"><label>'+pair[0].l+'</label><input id="'+pair[0].id+'" value="'+escHtml(pair[0].v||'')+'"></div>'+
-    '<div class="field"><label>'+pair[1].l+'</label><input id="'+pair[1].id+'" value="'+escHtml(pair[1].v||'')+'"></div>'+
-  '</div>';
-}
-
-render();
+loadConfig();
+// Logo input live preview
+document.getElementById('hero_logo')?.addEventListener('input',function(){showLogoPreview('hero_logo')});
+document.getElementById('footer_logo')?.addEventListener('input',function(){showLogoPreview('footer_logo')});
 </script>
-</body></html>
+</body>
+</html>
