@@ -15,4 +15,7 @@
 
 ## 部署
 
-推送到 GitHub 仓库后，在 Settings → Pages 中选择 `main` 分支即可启用。
+已部署到 GitHub Pages：
+**🌐 https://ckecheng27-rgb.github.io/xizihupan-tvc/**
+
+> 首次部署可能需要 1-2 分钟生效。
