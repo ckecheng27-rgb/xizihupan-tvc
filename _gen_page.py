@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+# -*- coding: utf-8 -*-
+import os
+
+LOGO_URL = 'https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png'
+
+page = r'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -78,20 +83,13 @@ body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0d0d0d;color
 </style>
 </head>
 <body>
-<nav class="nav-dots" id="nd"><a href="#hero"></a>
-<a href="#about"></a>
-<a href="#concept"></a>
-<a href="#highlights"></a>
-<a href="#cases"></a>
-<a href="#tech"></a>
-<a href="#data"></a>
-<a href="#footer"></a>
+<nav class="nav-dots" id="nd">''' + '\n'.join(['<a href="#'+s+'"></a>' for s in ['hero','about','concept','highlights','cases','tech','data','footer']]) + r'''
 </nav>
 <div class="mo" id="mo"><button class="mc" id="mc">✕</button><div class="mi" id="mi"></div></div>
 <div class="scroll-container">
 
 <section class="section" id="hero"><div class="fi">
-<img class="hero-logo" src="https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png" alt="我在西子湖畔">
+<img class="hero-logo" src="''' + LOGO_URL + r'''" alt="我在西子湖畔">
 <div class="hero-tag">AI · CREATIVE · STRATEGY</div>
 <div class="hero-sub">直播间TVC创意与AI实践方案</div>
 <div class="hero-year">2026 · 十惠鸭品牌</div>
@@ -102,11 +100,11 @@ body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0d0d0d;color
 
 <section class="section" id="concept"><div class="st fi">核心<em>创意</em></div><div class="sd"></div>
 <div class="ss fi">AIDA法则驱动的品牌叙事模型</div>
-<div class="g4"><div class="gc fi"><div class="gn">A</div><h4>引起注意</h4><p>强烈的视觉冲击或悬念，在第一秒留住观众</p></div><div class="gc fi"><div class="gn">I</div><h4>激发兴趣</h4><p>结合观众痛点，让故事产生代入感</p></div><div class="gc fi"><div class="gn">D</div><h4>唤起欲望</h4><p>展示美好愿景，让观众渴望拥有</p></div><div class="gc fi"><div class="gn">A</div><h4>促成行动</h4><p>明确的行动指令，完成互动闭环</p></div>
+<div class="g4">''' + ''.join(['<div class="gc fi"><div class="gn">'+i[0]+'</div><h4>'+i[1]+'</h4><p>'+i[2]+'</p></div>' for i in [('A','引起注意','强烈的视觉冲击或悬念，在第一秒留住观众'),('I','激发兴趣','结合观众痛点，让故事产生代入感'),('D','唤起欲望','展示美好愿景，让观众渴望拥有'),('A','促成行动','明确的行动指令，完成互动闭环')]]) + r'''
 </div></section>
 
 <section class="section" id="highlights"><div class="st fi">方案<em>亮点</em></div><div class="sd"></div>
-<div class="g4"><div class="gc fi"><div class="gn">01</div><h4>AI全流程创作</h4><p>从剧本到成片，Midjourney + Runway实现"所想即所得"</p></div><div class="gc fi"><div class="gn">02</div><h4>AI分镜提示词公式</h4><p>【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】</p></div><div class="gc fi"><div class="gn">03</div><h4>统一IP视觉体系</h4><p>"十惠鸭"贯穿四个案例，打造品牌记忆锚点</p></div><div class="gc fi"><div class="gn">04</div><h4>低成本高效率</h4><p>成本仅为传统TVC的5%-10%，迭代速度快</p></div>
+<div class="g4">''' + ''.join(['<div class="gc fi"><div class="gn">'+str(i[0]).zfill(2)+'</div><h4>'+i[1]+'</h4><p>'+i[2]+'</p></div>' for i in [(1,'AI全流程创作','从剧本到成片，Midjourney + Runway实现"所想即所得"'),(2,'AI分镜提示词公式','【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】'),(3,'统一IP视觉体系','"十惠鸭"贯穿四个案例，打造品牌记忆锚点'),(4,'低成本高效率','成本仅为传统TVC的5%-10%，迭代速度快')]]) + r'''
 </div></section>
 
 <section class="section" id="cases"><div class="st fi">案例<em>实践</em></div><div class="sd"></div>
@@ -114,15 +112,15 @@ body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0d0d0d;color
 <div class="cg" id="cg"></div></section>
 
 <section class="section" id="tech"><div class="st fi">技术<em>实现</em></div><div class="sd"></div>
-<div class="g4"><div class="gc fi"><h4>ChatGPT</h4><p>脚本与文案生成</p></div><div class="gc fi"><h4>Midjourney</h4><p>视觉设计与分镜</p></div><div class="gc fi"><h4>Runway</h4><p>AI视频生成</p></div><div class="gc fi"><h4>剪映</h4><p>剪辑与合成</p></div>
+<div class="g4">''' + ''.join(['<div class="gc fi"><h4>'+i[0]+'</h4><p>'+i[1]+'</p></div>' for i in [('ChatGPT','脚本与文案生成'),('Midjourney','视觉设计与分镜'),('Runway','AI视频生成'),('剪映','剪辑与合成')]]) + r'''
 </div></section>
 
 <section class="section" id="data"><div class="st fi">数据<em>效果</em></div><div class="sd"></div>
-<div class="dg"><div class="di fi"><div class="dn">4</div><div class="dl">支TVC成片</div></div><div class="di fi"><div class="dn">90%</div><div class="dl">成本降低</div></div><div class="di fi"><div class="dn">3-5</div><div class="dl">天制作周期</div></div>
+<div class="dg">''' + ''.join(['<div class="di fi"><div class="dn">'+i[0]+'</div><div class="dl">'+i[1]+'</div></div>' for i in [('4','支TVC成片'),('90%','成本降低'),('3-5','天制作周期')]]) + r'''
 </div></section>
 
 <section class="section" id="footer">
-<img class="fl" src="https://raw.githubusercontent.com/ckecheng27-rgb/xizihupan-tvc/main/images/logo.png" alt="我在西子湖畔">
+<img class="fl" src="''' + LOGO_URL + r'''" alt="我在西子湖畔">
 <div class="ft">十惠鸭品牌 · 直播电商 AI 赋能</div>
 <div class="fc">© 2026 十惠鸭品牌 · 直播间TVC创意方案</div></section>
 
@@ -192,4 +190,9 @@ try{
 }catch(e){}
 </script>
 </body>
-</html>
+</html>'''
+
+path = r'C:\Users\Designer\Desktop\西子湖畔交互展示\index.html'
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(page)
+print(f'Written: {len(page)} bytes')

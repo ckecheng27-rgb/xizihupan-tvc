@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+# -*- coding: utf-8 -*-
+admin = r'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -205,4 +206,9 @@ document.getElementById('loginPass').addEventListener('keydown',function(e){if(e
 document.getElementById('loginUser').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('loginPass').focus()});
 </script>
 </body>
-</html>
+</html>'''
+
+path = r'C:\Users\Designer\Desktop\西子湖畔交互展示\admin.html'
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(admin)
+print(f'Written: {len(admin)} bytes')
