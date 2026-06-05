@@ -102,7 +102,7 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 <div class="video-overlay"></div>
 <div class="content fade-in">
 <div class="subtitle-top">AI &#183; CREATIVE &#183; STRATEGY</div>
-<h1>我在<strong>西子湖畔</strong></h1>
+<h1><img src="images/logo.png" alt="我在西子湖畔" style="max-height:72px;max-width:90%;vertical-align:middle"></h1>
 <div class="subtitle">直播间TVC创意与AI实践方案</div>
 <div class="year">2026 &#183; 十惠鸭品牌</div>
 </div>
@@ -186,7 +186,7 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 <video class="video-bg" autoplay muted loop playsinline><source src="videos/footer-bg.mp4" type="video/mp4"></video>
 <div class="video-overlay"></div>
 <div class="footer-content fade-in">
-<h2>我在<strong>西子湖畔</strong></h2>
+<h2><img src="images/logo.png" alt="我在西子湖畔" style="max-height:48px;max-width:80%;vertical-align:middle"></h2>
 <div class="footer-sub">十年深耕 &#183; 直播电商 AI 赋能</div>
 <div class="footer-links"><a href="https://github.com/ckecheng27-rgb/xizihupan-tvc" target="_blank">GitHub</a></div>
 <div class="copyright">&copy; 2026 十惠鸭品牌 &#183; 直播间TVC创意方案</div>
@@ -277,7 +277,9 @@ if(c.data){
   var dv=document.querySelector('#data .video-bg source');if(dv&&c.data.video)dv.src=c.data.video;
 }
 if(c.footer){
-  var fh=document.querySelector('#footer h2');if(fh&&c.footer.title1&&c.footer.title2)fh.innerHTML=c.footer.title1+'<strong>'+c.footer.title2+'</strong>';
+  var fh=document.querySelector('#footer h2');
+  if(fh&&c.footer.logo)fh.innerHTML='<img src="'+c.footer.logo+'" style="max-height:48px;max-width:80%;vertical-align:middle">';
+  else if(fh&&c.footer.title1&&c.footer.title2)fh.innerHTML=c.footer.title1+'<strong>'+c.footer.title2+'</strong>';
   var fs=document.querySelector('#footer .footer-sub');if(fs&&c.footer.subtitle)fs.innerHTML=c.footer.subtitle;
   var fc=document.querySelector('#footer .copyright');if(fc&&c.footer.copyright)fc.innerHTML=c.footer.copyright;
   var fv=document.querySelector('#footer .video-bg source');if(fv&&c.footer.video)fv.src=c.footer.video;

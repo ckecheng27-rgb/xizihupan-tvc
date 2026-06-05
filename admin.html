@@ -108,8 +108,7 @@ var DEFAULT = {
     video: 'videos/footer-bg.mp4'
   },
   footer: {
-    title1: '我在',
-    title2: '西子湖畔',
+    logo: '',
     subtitle: '十年深耕 &#183; 直播电商 AI 赋能',
     copyright: '&copy; 2026 十惠鸭品牌 &#183; 直播间TVC创意方案',
     video: 'videos/footer-bg.mp4'
@@ -193,8 +192,7 @@ function collectForm(){
   CONFIG.data.video = document.getElementById('data_video').value;
   
   // Footer
-  CONFIG.footer.title1 = document.getElementById('footer_t1').value;
-  CONFIG.footer.title2 = document.getElementById('footer_t2').value;
+  CONFIG.footer.logo = document.getElementById('footer_logo').value;
   CONFIG.footer.subtitle = document.getElementById('footer_sub').value;
   CONFIG.footer.copyright = document.getElementById('footer_cr').value;
   CONFIG.footer.video = document.getElementById('footer_video').value;
@@ -289,8 +287,7 @@ function render(){
   ]);
   
   h+=section('Footer',[
-    field('标题前半','footer_t1',c.footer.title1),
-    field('标题后半（粗体）','footer_t2',c.footer.title2),
+    fieldImg('Logo图片','footer_logo',c.footer.logo),
     field('副标题','footer_sub',c.footer.subtitle),
     textarea('版权信息','footer_cr',c.footer.copyright),
     fieldV('视频路径','footer_video',c.footer.video)
