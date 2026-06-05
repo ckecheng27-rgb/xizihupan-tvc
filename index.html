@@ -226,6 +226,69 @@ function upd(){var cur=0;sec.forEach(function(s,i){var r=s.getBoundingClientRect
 S.addEventListener("scroll",upd);upd();
 var fd=document.querySelectorAll(".fade-in"),ob=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add("visible")})},{threshold:.1});
 fd.forEach(function(e){ob.observe(e)});
+
+/* 从 localStorage 读取后台配置 */
+(function(){
+  try {
+    var cfg = JSON.parse(localStorage.getItem('xizitvc_config'));
+    if(!cfg) return;
+    if(cfg.hero_subtitle){
+      var els = document.querySelectorAll('.subtitle');
+      if(els[0]) els[0].textContent = cfg.hero_subtitle;
+    }
+    if(cfg.hero_tag){
+      var el = document.querySelector('.subtitle-top');
+      if(el) el.textContent = cfg.hero_tag;
+    }
+    if(cfg.hero_year){
+      var el = document.querySelector('.year');
+      if(el) el.textContent = cfg.hero_year;
+    }
+    if(cfg.about_text){
+      var el = document.querySelector('.about-text p');
+      if(el) el.textContent = cfg.about_text;
+    }
+    if(cfg.footer_text){
+      var el = document.querySelector('.footer-sub');
+      if(el) el.textContent = cfg.footer_text;
+    }
+    if(cfg.footer_cr){
+      var el = document.querySelector('.copyright');
+      if(el) el.textContent = cfg.footer_cr;
+    }
+    /* 案例描述 */
+    var descs = cfg.c1_desc ? [cfg.c1_desc, cfg.c2_desc, cfg.c3_desc, cfg.c4_desc] : null;
+    if(descs){
+      var cards = document.querySelectorAll('.case-desc');
+      cards.forEach(function(e,i){
+        if(descs[i]) e.textContent = descs[i];
+      });
+    }
+    /* 技术实现 */
+    var techs = [cfg.t1, cfg.t2, cfg.t3, cfg.t4].filter(Boolean);
+    if(techs.length){
+      var items = document.querySelectorAll('#tech .grid-item p');
+      items.forEach(function(e,i){
+        if(techs[i]) e.textContent = techs[i];
+      });
+    }
+    /* 数据 */
+    var dn = [cfg.d1_num, cfg.d2_num, cfg.d3_num];
+    var dl = [cfg.d1_label, cfg.d2_label, cfg.d3_label];
+    if(dn.some(Boolean)){
+      var nums = document.querySelectorAll('#data .num');
+      nums.forEach(function(e,i){
+        if(dn[i]) e.textContent = dn[i];
+      });
+    }
+    if(dl.some(Boolean)){
+      var labs = document.querySelectorAll('#data h4');
+      labs.forEach(function(e,i){
+        if(dl[i]) e.textContent = dl[i];
+      });
+    }
+  } catch(e){}
+})();
 </script>
 <div style="position:fixed;bottom:20px;right:20px;z-index:99;opacity:.15;transition:opacity .3s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.15"><a href="admin.html" target="_blank" style="color:#c9a84c;text-decoration:none;font-size:10px;letter-spacing:1px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:3px;border:1px solid rgba(201,168,76,.15)">⚙ 管理</a></div>
 </body></html>
