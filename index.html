@@ -287,6 +287,26 @@ fd.forEach(function(e){ob.observe(e)});
         if(dl[i]) e.textContent = dl[i];
       });
     }
+    /* 样式设置 */
+    if(cfg.body_color) document.body.style.color = cfg.body_color;
+    if(cfg.title_color){
+      document.querySelectorAll('h1, h2, .section-title, #hero .subtitle, .year').forEach(function(e){
+        e.style.color = cfg.title_color;
+      });
+    }
+    if(cfg.accent_color){
+      document.querySelectorAll('strong, em, .section-title em, #hero .subtitle-top, .scroll-hint span, .nav-dots a.active, .nav-dots a:hover').forEach(function(e){
+        e.style.color = cfg.accent_color;
+      });
+      /* 金色边框元素 */
+      document.querySelectorAll('.section-divider').forEach(function(e){
+        e.style.background = cfg.accent_color;
+      });
+    }
+    if(cfg.font_size){
+      var sizeMap = {'small':'13px','medium':'15px','large':'18px'};
+      document.body.style.fontSize = sizeMap[cfg.font_size] || '15px';
+    }
   } catch(e){}
 })();
 </script>

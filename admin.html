@@ -132,6 +132,18 @@ body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0d0d0d;color
 </div>
 
 <div class="sc">
+<h2>🎨 样式设置</h2>
+<div class="row">
+<div class="field"><label>正文颜色</label><input type="color" id="body_color" value="#f0ede8"></div>
+<div class="field"><label>标题颜色</label><input type="color" id="title_color" value="#ffffff"></div>
+</div>
+<div class="row">
+<div class="field"><label>强调色（金色）</label><input type="color" id="accent_color" value="#c9a84c"></div>
+<div class="field"><label>字体大小</label><select id="font_size" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#f0ede8;padding:8px 12px;font-size:13px;border-radius:4px;outline:none"><option value="small">小</option><option value="medium" selected>中</option><option value="large">大</option></select></div>
+</div>
+</div>
+
+<div class="sc">
 <h2>🏁 页脚</h2>
 <div class="field"><label>文字</label><input type="text" id="footer_text" value="十惠鸭品牌 · 直播电商 AI 赋能"></div>
 <div class="field"><label>版权</label><input type="text" id="footer_cr" value="© 2026 十惠鸭品牌 · 直播间TVC创意方案"></div>
@@ -148,8 +160,8 @@ body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0d0d0d;color
 <div class="toast" id="toast"></div>
 
 <script>
-var ACCOUNT='2021687574',PASS='Zxc10231417';
-var DEFAULTS={hero_subtitle:'直播间TVC创意与AI实践方案',hero_tag:'AI · CREATIVE · STRATEGY',hero_year:'2026 · 十惠鸭品牌',about_text:'本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。',h1_title:'AI全流程创作',h1_desc:'从剧本到成片，Midjourney + Runway实现"所想即所得"',h2_title:'AI分镜提示词公式',h2_desc:'【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】',h3_title:'统一IP视觉体系',h3_desc:'"十惠鸭"贯穿四个案例，打造品牌记忆锚点',h4_title:'低成本高效率',h4_desc:'成本仅为传统TVC的5%-10%，迭代速度快',c1_desc:'新中式意境融合，白蛇传说与直播间福利的创意碰撞',c2_desc:'水墨江南意境，十惠鸭泛舟西湖寻找福利的故事',c3_desc:'武侠风格创意，十惠鸭端午破五毒的趣味叙事',c4_desc:'反差幽默，钓鱼梗与红包福利的惊喜结合',t1:'ChatGPT · 脚本生成',t2:'Midjourney · 视觉设计',t3:'Runway · 视频生成',t4:'剪映 · 剪辑合成',d1_num:'4',d1_label:'支TVC成片',d2_num:'90%',d2_label:'成本降低',d3_num:'3-5',d3_label:'天制作周期',footer_text:'十惠鸭品牌 · 直播电商 AI 赋能',footer_cr:'© 2026 十惠鸭品牌 · 直播间TVC创意方案'};
+var ACCOUNT='我在西子湖畔',PASS='123456';
+var DEFAULTS={hero_subtitle:'直播间TVC创意与AI实践方案',hero_tag:'AI · CREATIVE · STRATEGY',hero_year:'2026 · 十惠鸭品牌',about_text:'本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。',h1_title:'AI全流程创作',h1_desc:'从剧本到成片，Midjourney + Runway实现"所想即所得"',h2_title:'AI分镜提示词公式',h2_desc:'【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】',h3_title:'统一IP视觉体系',h3_desc:'"十惠鸭"贯穿四个案例，打造品牌记忆锚点',h4_title:'低成本高效率',h4_desc:'成本仅为传统TVC的5%-10%，迭代速度快',c1_desc:'新中式意境融合，白蛇传说与直播间福利的创意碰撞',c2_desc:'水墨江南意境，十惠鸭泛舟西湖寻找福利的故事',c3_desc:'武侠风格创意，十惠鸭端午破五毒的趣味叙事',c4_desc:'反差幽默，钓鱼梗与红包福利的惊喜结合',t1:'ChatGPT · 脚本生成',t2:'Midjourney · 视觉设计',t3:'Runway · 视频生成',t4:'剪映 · 剪辑合成',d1_num:'4',d1_label:'支TVC成片',d2_num:'90%',d2_label:'成本降低',d3_num:'3-5',d3_label:'天制作周期',body_color:'#f0ede8',title_color:'#ffffff',accent_color:'#c9a84c',font_size:'medium',footer_text:'十惠鸭品牌 · 直播电商 AI 赋能',footer_cr:'© 2026 十惠鸭品牌 · 直播间TVC创意方案'};
 
 function showToast(msg,ok){
   var t=document.getElementById('toast');
