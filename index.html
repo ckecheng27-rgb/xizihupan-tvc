@@ -226,4 +226,6 @@ function upd(){var cur=0;sec.forEach(function(s,i){var r=s.getBoundingClientRect
 S.addEventListener("scroll",upd);upd();
 var fd=document.querySelectorAll(".fade-in"),ob=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add("visible")})},{threshold:.1});
 fd.forEach(function(e){ob.observe(e)});
-</script></body></html>
+</script>
+<div style="position:fixed;bottom:20px;right:20px;z-index:99;opacity:.15;transition:opacity .3s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.15"><a href="admin.html" target="_blank" style="color:#c9a84c;text-decoration:none;font-size:10px;letter-spacing:1px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:3px;border:1px solid rgba(201,168,76,.15)">⚙ 管理</a></div>
+</body></html>
