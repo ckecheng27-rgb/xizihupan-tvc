@@ -202,7 +202,7 @@ body {
 #goals {
   background: #0d0d0d;
 }
-.goals-grid {
+.concept-grid {
   display: flex;
   gap: 40px;
   position: relative;
@@ -212,7 +212,7 @@ body {
   justify-content: center;
   flex-wrap: wrap;
 }
-.goal-card {
+.concept-item {
   flex: 1;
   min-width: 200px;
   max-width: 300px;
@@ -222,24 +222,24 @@ body {
   background: rgba(255,255,255,0.02);
   transition: all 0.5s ease;
 }
-.goal-card:hover {
+.concept-item:hover {
   border-color: rgba(201, 168, 76, 0.4);
   background: rgba(255,255,255,0.04);
   transform: translateY(-4px);
 }
-.goal-card .number {
+.concept-item .number {
   font-size: 32px;
   font-weight: 200;
   color: #c9a84c;
   margin-bottom: 16px;
 }
-.goal-card h3 {
+.concept-item h3 {
   font-size: 18px;
   font-weight: 300;
   letter-spacing: 2px;
   margin-bottom: 12px;
 }
-.goal-card p {
+.concept-item p {
   font-size: 13px;
   font-weight: 200;
   line-height: 1.6;
@@ -411,7 +411,7 @@ body {
 #cost {
   background: #0d0d0d;
 }
-.cost-grid {
+.data-grid {
   display: flex;
   gap: 20px;
   max-width: 900px;
@@ -421,7 +421,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
 }
-.cost-item {
+.data-item {
   flex: 1;
   min-width: 200px;
   max-width: 280px;
@@ -429,13 +429,13 @@ body {
   text-align: center;
   border: 1px solid rgba(255,255,255,0.04);
 }
-.cost-item .cost-value {
+.data-item .cost-value {
   font-size: 36px;
   font-weight: 200;
   color: #c9a84c;
   margin-bottom: 8px;
 }
-.cost-item .cost-label {
+.data-item .cost-label {
   font-size: 12px;
   font-weight: 200;
   color: rgba(240, 237, 232, 0.4);
@@ -479,12 +479,12 @@ body {
 @media (max-width: 768px) {
   .section { padding: 60px 24px; }
   .nav-dots { right: 14px; gap: 10px; }
-  .goals-grid { gap: 16px; }
-  .goal-card { min-width: 140px; padding: 28px 16px; }
+  .concept-grid { gap: 16px; }
+  .concept-item { min-width: 140px; padding: 28px 16px; }
   .step-item { width: 100%; min-width: unset; }
   .aida-card { min-width: 140px; }
   .case-card { min-width: 240px; }
-  .cost-item { min-width: 140px; }
+  .data-item { min-width: 140px; }
 }
 
 /* ========== MODAL ========== */
@@ -558,12 +558,12 @@ body {
 <!-- Navigation Dots -->
 <nav class="nav-dots" id="navDots">
   <a href="#hero" class="active"></a>
-  <a href="#background"></a>
-  <a href="#goals"></a>
-  <a href="#workflow"></a>
-  <a href="#aida"></a>
+  <a href="#about"></a>
+  <a href="#concept"></a>
+  <a href="#tech"></a>
+  <a href="#highlights"></a>
   <a href="#cases"></a>
-  <a href="#cost"></a>
+  <a href="#data"></a>
   <a href="#footer"></a>
 </nav>
 
@@ -572,15 +572,15 @@ body {
 
   <!-- ==================== HERO ==================== -->
   <section class="section" id="hero">
-    <video class="video-bg" autoplay muted loop playsinline poster="images/poster-hero.jpg">
+    <video class="video-bg" autoplay muted loop playsinline>
       <source src="videos/hero-bg.mp4" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
-    <div class="content">
-      <div class="subtitle-top">AI · CREATIVE · PRACTICE</div>
-      <h1>AI赋能品牌传播<strong>新纪元</strong></h1>
+    <div class="content fade-in">
+      <div class="subtitle-top">AI &#183; CREATIVE &#183; STRATEGY</div>
+      <h1>我在<strong>西子湖畔</strong></h1>
       <div class="subtitle">直播间TVC创意与AI实践方案</div>
-      <div class="year">2026 · STRATEGY &amp; CREATIVE</div>
+      <div class="year">2026 &#183; 十惠鸭品牌</div>
     </div>
     <div class="scroll-hint">
       <span>向下探索</span>
@@ -589,34 +589,31 @@ body {
   </section>
 
   <!-- ==================== BACKGROUND ==================== -->
-  <section class="section" id="background" style="background:#0a0a0a;">
-    <div class="section-title fade-in">信息洪流中，品牌如何<em>破局</em>？</div>
+  <section class="section" id="about" style="background:#0a0a0a;">
+    <div class="section-title fade-in">关于<em>方案</em></div>
     <div class="section-divider"></div>
     <div class="bg-text fade-in">
-      <p>在信息爆炸的时代，品牌声量被海量内容稀释。<br>
-        传统TVC制作周期长、成本高、创意落地难。<br>
-        AI技术正在重塑品牌传播的方式——<br>
-        从创意构思到成片输出，全链路智能化。</p>
+      <p>AI赋能品牌传播新纪元。本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。</p>
     </div>
   </section>
 
   <!-- ==================== GOALS ==================== -->
-  <section class="section" id="goals">
-    <div class="section-title fade-in">核心<em>目标</em></div>
+  <section class="section" id="concept">
+    <div class="section-title fade-in">核心<em>创意</em></div>
     <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">三位一体 · 品牌传播新范式</div>
-    <div class="goals-grid">
-      <div class="goal-card fade-in">
+    <div class="section-subtitle fade-in">AIDA法则驱动的品牌叙事模型</div>
+    <div class="concept-grid">
+      <div class="concept-item fade-in">
         <div class="number">01</div>
         <h3>品牌强关联</h3>
         <p>让消费者在提到直播间时，能够清晰地联想到品牌</p>
       </div>
-      <div class="goal-card fade-in">
+      <div class="concept-item fade-in">
         <div class="number">02</div>
         <h3>传播破圈</h3>
         <p>通过高品质内容制造话题，突破原有粉丝圈层</p>
       </div>
-      <div class="goal-card fade-in">
+      <div class="concept-item fade-in">
         <div class="number">03</div>
         <h3>技术创新</h3>
         <p>以AI技术赋能创意，实现降本增效与规模化产出</p>
@@ -625,10 +622,10 @@ body {
   </section>
 
   <!-- ==================== WORKFLOW ==================== -->
-  <section class="section" id="workflow">
-    <div class="section-title fade-in">AI视频创作<em>工作流</em></div>
+  <section class="section" id="tech">
+    <div class="section-title fade-in">技术<em>实现</em></div>
     <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">从灵感到成片 · 全链路AI赋能</div>
+    <div class="section-subtitle fade-in">AI全链路创作工具链</div>
 
     <div class="workflow-steps">
       <div class="step-item fade-in">
@@ -677,10 +674,10 @@ body {
   </section>
 
   <!-- ==================== AIDA ==================== -->
-  <section class="section" id="aida">
-    <div class="section-title fade-in">创意<em>方法论</em></div>
+  <section class="section" id="highlights">
+    <div class="section-title fade-in">方案<em>亮点</em></div>
     <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">AIDA法则 · 从注意到行动</div>
+    <div class="section-subtitle fade-in">四大核心价值</div>
     <div class="aida-grid">
       <div class="aida-card fade-in">
         <div class="letter">A</div>
@@ -763,20 +760,20 @@ body {
   </section>
 
   <!-- ==================== COST ==================== -->
-  <section class="section" id="cost">
-    <div class="section-title fade-in">模型与<em>成本</em></div>
+  <section class="section" id="data">
+    <div class="section-title fade-in">数据<em>效果</em></div>
     <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">核心模型选择 · 成本控制策略</div>
-    <div class="cost-grid">
-      <div class="cost-item fade-in">
+    <div class="section-subtitle fade-in">效率与成本数据</div>
+    <div class="data-grid">
+      <div class="data-item fade-in">
         <div class="cost-value">5x</div>
         <div class="cost-label">制作效率提升</div>
       </div>
-      <div class="cost-item fade-in">
+      <div class="data-item fade-in">
         <div class="cost-value">70%</div>
         <div class="cost-label">成本降低</div>
       </div>
-      <div class="cost-item fade-in">
+      <div class="data-item fade-in">
         <div class="cost-value">4K</div>
         <div class="cost-label">高清画质输出</div>
       </div>
