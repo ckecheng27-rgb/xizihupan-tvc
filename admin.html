@@ -50,8 +50,7 @@ pre{font-size:11px;color:rgba(240,237,232,.3);margin-top:20px;padding:12px;backg
 // Default config
 var DEFAULT = {
   hero: {
-    title1: '我在',
-    title2: '西子湖畔',
+    logo: '',
     subtitle: '直播间TVC创意与AI实践方案',
     year: '2026 &#183; 十惠鸭品牌',
     video: 'videos/hero-bg.mp4'
@@ -143,8 +142,7 @@ function resetConfig(){
 
 function collectForm(){
   // Hero
-  CONFIG.hero.title1 = document.getElementById('hero_title1').value;
-  CONFIG.hero.title2 = document.getElementById('hero_title2').value;
+  CONFIG.hero.logo = document.getElementById('hero_logo').value;
   CONFIG.hero.subtitle = document.getElementById('hero_subtitle').value;
   CONFIG.hero.year = document.getElementById('hero_year').value;
   CONFIG.hero.video = document.getElementById('hero_video').value;
@@ -224,8 +222,7 @@ function render(){
   
   // Hero
   h+=section('首页 Hero',[
-    field('标题前半','hero_title1',c.hero.title1),
-    field('标题后半（粗体）','hero_title2',c.hero.title2),
+    fieldImg('Logo图片 (PNG路径)','hero_logo',c.hero.logo),
     field('副标题','hero_subtitle',c.hero.subtitle),
     field('年份/品牌','hero_year',c.hero.year),
     fieldV('视频路径','hero_video',c.hero.video)
@@ -317,6 +314,11 @@ function textarea(label,id,val){
 
 function fieldV(label,id,val){
   return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'" style="color:#c9a84c;font-family:monospace"></div>';
+}
+function fieldImg(label,id,val){
+  var imgHtml='';
+  if(val) imgHtml='<div style="margin-top:6px;background:rgba(255,255,255,.03);padding:8px;border:1px solid rgba(255,255,255,.06);text-align:center"><img src="'+escHtml(val)+'" style="max-height:60px;max-width:200px;opacity:.8"></div>';
+  return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'" placeholder="images/logo.png 或 http://... " style="color:#c9a84c;font-family:monospace">'+imgHtml+'</div>';
 }
 
 function fieldRow(pair){
