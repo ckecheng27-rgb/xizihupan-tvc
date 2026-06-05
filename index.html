@@ -2,1040 +2,228 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>我在西子湖畔 · TVC创意与AI实践</title>
 <style>
-/* ========== Reset & Base ========== */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
-  background: #0a0a0a;
-  color: #f0ede8;
-  overflow-x: hidden;
-}
-
-/* ========== Scroll Snap Container ========== */
-.scroll-container {
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scrollbar-width: none;
-}
-.scroll-container::-webkit-scrollbar { display: none; }
-
-.section {
-  position: relative;
-  min-height: 100vh;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 80px 40px;
-  overflow: hidden;
-}
-
-/* ========== Navigation dots ========== */
-.nav-dots {
-  position: fixed;
-  right: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.nav-dots a {
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(240, 237, 232, 0.25);
-  transition: all 0.4s ease;
-  text-decoration: none;
-}
-.nav-dots a:hover,
-.nav-dots a.active {
-  background: #c9a84c;
-  box-shadow: 0 0 12px rgba(201, 168, 76, 0.4);
-  transform: scale(1.3);
-}
-
-/* ========== Video Background ========== */
-.video-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  opacity: 0.5;
-}
-.video-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(135deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.5) 50%, rgba(10,10,10,0.85) 100%);
-  z-index: 1;
-}
-
-/* ========== Hero ========== */
-#hero {
-  text-align: center;
-}
-#hero .content {
-  position: relative;
-  z-index: 2;
-  max-width: 900px;
-}
-#hero .subtitle-top {
-  font-size: 13px;
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  color: #c9a84c;
-  margin-bottom: 30px;
-  font-weight: 300;
-}
-#hero h1 {
-  font-size: clamp(36px, 6vw, 72px);
-  font-weight: 200;
-  letter-spacing: 4px;
-  line-height: 1.2;
-  margin-bottom: 20px;
-}
-#hero h1 strong {
-  font-weight: 400;
-  color: #c9a84c;
-}
-#hero .subtitle {
-  font-size: clamp(14px, 2vw, 22px);
-  font-weight: 200;
-  letter-spacing: 3px;
-  color: rgba(240, 237, 232, 0.6);
-  margin-bottom: 40px;
-}
-#hero .year {
-  font-size: 12px;
-  letter-spacing: 4px;
-  color: rgba(240, 237, 232, 0.3);
-}
-.scroll-hint {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: rgba(240, 237, 232, 0.35);
-  font-size: 11px;
-  letter-spacing: 2px;
-  animation: float 2s ease-in-out infinite;
-}
-.scroll-hint .arrow {
-  width: 16px; height: 16px;
-  border-right: 1px solid rgba(240, 237, 232, 0.35);
-  border-bottom: 1px solid rgba(240, 237, 232, 0.35);
-  transform: rotate(45deg);
-}
-@keyframes float {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
-}
-
-/* ========== Common Section Styles ========== */
-.section-title {
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 200;
-  letter-spacing: 3px;
-  text-align: center;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 2;
-}
-.section-title em {
-  font-style: normal;
-  color: #c9a84c;
-}
-.section-subtitle {
-  font-size: clamp(13px, 1.2vw, 16px);
-  font-weight: 200;
-  letter-spacing: 3px;
-  color: rgba(240, 237, 232, 0.45);
-  text-align: center;
-  margin-bottom: 60px;
-  position: relative;
-  z-index: 2;
-}
-.section-divider {
-  width: 40px;
-  height: 1px;
-  background: #c9a84c;
-  margin: 20px auto 40px;
-  position: relative;
-  z-index: 2;
-}
-
-/* ========== Background Section ========== */
-#background .bg-text {
-  max-width: 800px;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-#background .bg-text p {
-  font-size: clamp(15px, 1.5vw, 20px);
-  font-weight: 200;
-  line-height: 1.8;
-  color: rgba(240, 237, 232, 0.7);
-  letter-spacing: 1px;
-}
-
-/* ========== Goals / 三位一体 ========== */
-#goals {
-  background: #0d0d0d;
-}
-.concept-grid {
-  display: flex;
-  gap: 40px;
-  position: relative;
-  z-index: 2;
-  max-width: 1000px;
-  width: 100%;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.concept-item {
-  flex: 1;
-  min-width: 200px;
-  max-width: 300px;
-  text-align: center;
-  padding: 40px 24px;
-  border: 1px solid rgba(201, 168, 76, 0.15);
-  background: rgba(255,255,255,0.02);
-  transition: all 0.5s ease;
-}
-.concept-item:hover {
-  border-color: rgba(201, 168, 76, 0.4);
-  background: rgba(255,255,255,0.04);
-  transform: translateY(-4px);
-}
-.concept-item .number {
-  font-size: 32px;
-  font-weight: 200;
-  color: #c9a84c;
-  margin-bottom: 16px;
-}
-.concept-item h3 {
-  font-size: 18px;
-  font-weight: 300;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
-}
-.concept-item p {
-  font-size: 13px;
-  font-weight: 200;
-  line-height: 1.6;
-  color: rgba(240, 237, 232, 0.5);
-}
-
-/* ========== Workflow / 工作流 ========== */
-#workflow {
-  background: #0a0a0a;
-}
-.workflow-steps {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0;
-  max-width: 1000px;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
-.step-item {
-  display: flex;
-  align-items: flex-start;
-  width: 45%;
-  min-width: 260px;
-  padding: 24px 20px;
-  gap: 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.step-item .step-num {
-  font-size: 14px;
-  font-weight: 400;
-  color: #c9a84c;
-  min-width: 28px;
-  letter-spacing: 1px;
-}
-.step-item .step-text h4 {
-  font-size: 15px;
-  font-weight: 300;
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-.step-item .step-text p {
-  font-size: 12px;
-  font-weight: 200;
-  color: rgba(240, 237, 232, 0.4);
-  line-height: 1.5;
-}
-
-/* ========== AIDA ========== */
-#aida {
-  background: #0d0d0d;
-}
-.aida-grid {
-  display: flex;
-  gap: 1px;
-  max-width: 900px;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.aida-card {
-  flex: 1;
-  min-width: 180px;
-  max-width: 220px;
-  padding: 36px 20px;
-  text-align: center;
-  background: rgba(255,255,255,0.015);
-  border: 1px solid rgba(255,255,255,0.04);
-  transition: all 0.4s ease;
-}
-.aida-card:hover {
-  background: rgba(201, 168, 76, 0.06);
-  border-color: rgba(201, 168, 76, 0.2);
-}
-.aida-card .letter {
-  font-size: 36px;
-  font-weight: 200;
-  color: #c9a84c;
-  margin-bottom: 12px;
-}
-.aida-card h4 {
-  font-size: 15px;
-  font-weight: 300;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.aida-card p {
-  font-size: 12px;
-  font-weight: 200;
-  line-height: 1.6;
-  color: rgba(240, 237, 232, 0.45);
-}
-
-/* ========== Cases ========== */
-#cases {
-  background: #0a0a0a;
-  padding: 80px 40px;
-}
-.cases-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  max-width: 1100px;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-  justify-content: center;
-}
-.case-card {
-  flex: 1;
-  min-width: 280px;
-  max-width: 500px;
-  padding: 60px 36px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.015);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.5s ease;
-}
-.case-card:hover {
-  border-color: rgba(201, 168, 76, 0.3);
-  background: rgba(255,255,255,0.025);
-}
-.case-card video {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  opacity: 0.15;
-  z-index: 0;
-}
-.case-card .case-overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(180deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.3) 50%, rgba(10,10,10,0.8) 100%);
-  z-index: 1;
-}
-.case-card .case-content {
-  position: relative;
-  z-index: 2;
-}
-.case-card .case-label {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: #c9a84c;
-  margin-bottom: 12px;
-}
-.case-card h3 {
-  font-size: clamp(18px, 2vw, 26px);
-  font-weight: 200;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
-}
-.case-card .case-desc {
-  font-size: 13px;
-  font-weight: 200;
-  line-height: 1.7;
-  color: rgba(240, 237, 232, 0.5);
-  max-width: 360px;
-  margin: 0 auto;
-}
-
-/* ========== Cost / 成本 ========== */
-#cost {
-  background: #0d0d0d;
-}
-.data-grid {
-  display: flex;
-  gap: 20px;
-  max-width: 900px;
-  width: 100%;
-  position: relative;
-  z-index: 2;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.data-item {
-  flex: 1;
-  min-width: 200px;
-  max-width: 280px;
-  padding: 32px 20px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-.data-item .cost-value {
-  font-size: 36px;
-  font-weight: 200;
-  color: #c9a84c;
-  margin-bottom: 8px;
-}
-.data-item .cost-label {
-  font-size: 12px;
-  font-weight: 200;
-  color: rgba(240, 237, 232, 0.4);
-  letter-spacing: 1px;
-}
-
-/* ========== Footer ========== */
-#footer {
-  min-height: 60vh;
-  text-align: center;
-}
-#footer .footer-text {
-  position: relative;
-  z-index: 2;
-}
-#footer h2 {
-  font-size: clamp(24px, 3vw, 40px);
-  font-weight: 200;
-  letter-spacing: 4px;
-  margin-bottom: 16px;
-}
-#footer p {
-  font-size: 14px;
-  font-weight: 200;
-  color: rgba(240, 237, 232, 0.35);
-  letter-spacing: 2px;
-}
-
-/* ========== Animations ========== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ========== Responsive ========== */
-@media (max-width: 768px) {
-  .section { padding: 60px 24px; }
-  .nav-dots { right: 14px; gap: 10px; }
-  .concept-grid { gap: 16px; }
-  .concept-item { min-width: 140px; padding: 28px 16px; }
-  .step-item { width: 100%; min-width: unset; }
-  .aida-card { min-width: 140px; }
-  .case-card { min-width: 240px; }
-  .data-item { min-width: 140px; }
-}
-
-/* ========== MODAL ========== */
-.modal-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 1000; background: rgba(5,5,5,0.92);
-  display: none; justify-content: center; align-items: flex-start;
-  opacity: 0; transition: opacity 0.4s ease;
-}
-.modal-overlay.show { display: flex; opacity: 1; }
-.modal-close {
-  position: fixed; top: 30px; right: 30px; z-index: 1001;
-  width: 44px; height: 44px; cursor: pointer;
-  background: none; border: none; color: #f0ede8;
-  font-size: 28px; opacity: 0.4; transition: all 0.3s;
-  display: flex; align-items: center; justify-content: center;
-}
-.modal-close:hover { opacity: 1; color: #c9a84c; transform: rotate(90deg); }
-.modal-bg-video {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  object-fit: cover; z-index: -1; opacity: 0.15;
-}
-.modal-scroll {
-  width: 100%; height: 100vh; overflow-y: auto;
-  padding: 80px 48px 60px; scrollbar-width: thin;
-  scrollbar-color: rgba(201,168,76,0.2) transparent;
-}
-.modal-scroll::-webkit-scrollbar { width: 4px; }
-.modal-scroll::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
-.modal-inner { max-width: 960px; margin: 0 auto; }
-.modal-header { margin-bottom: 40px; }
-.modal-header .case-number { font-size: 11px; letter-spacing: 5px; color: #c9a84c; margin-bottom: 12px; }
-.modal-header h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 200; letter-spacing: 3px; margin-bottom: 10px; }
-.modal-header .core-idea { font-size: 14px; font-weight: 200; letter-spacing: 1px; color: rgba(240,237,232,0.55); line-height: 1.8; }
-.modal-header .core-idea strong { color: #c9a84c; font-weight: 300; }
-.storyboard { display: flex; flex-direction: column; gap: 12px; }
-.storyboard-item {
-  display: grid; grid-template-columns: 70px 1fr; gap: 16px;
-  padding: 16px 20px; border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.015); transition: all 0.3s;
-}
-.storyboard-item:hover { border-color: rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); }
-.storyboard-item .shot-time {
-  font-size: 11px; letter-spacing: 1px; color: #c9a84c;
-  font-weight: 300; padding-top: 2px;
-}
-.storyboard-item .shot-desc { font-size: 13px; font-weight: 200; line-height: 1.7; color: rgba(240,237,232,0.7); }
-.storyboard-item .shot-desc .tag {
-  display: inline-block; font-size: 10px; letter-spacing: 1px;
-  color: #c9a84c; border: 1px solid rgba(201,168,76,0.2);
-  padding: 1px 8px; border-radius: 2px; margin-right: 6px;
-}
-.modal-section-title {
-  font-size: 13px; letter-spacing: 3px; color: #c9a84c;
-  margin: 36px 0 16px; font-weight: 300;
-}
-.modal-aida { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 4px; }
-.aida-item { padding: 16px; border: 1px solid rgba(201,168,76,0.1); background: rgba(255,255,255,0.01); }
-.aida-item .aida-label { font-size: 10px; letter-spacing: 3px; color: #c9a84c; margin-bottom: 6px; }
-.aida-item p { font-size: 12px; font-weight: 200; color: rgba(240,237,232,0.5); line-height: 1.6; }
-.keyframes-grid { margin-top: 4px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-.keyframe-item { padding: 12px 14px; border: 1px solid rgba(255,255,255,0.06); font-size: 12px; font-weight: 200; line-height: 1.6; color: rgba(240,237,232,0.6); }
-.keyframe-item .kf-num { display: inline-block; font-size: 10px; color: #c9a84c; border: 1px solid rgba(201,168,76,0.2); padding: 0 6px; margin-right: 6px; border-radius: 2px; }
-.modal-footer-text { margin-top: 32px; font-size: 11px; letter-spacing: 1px; color: rgba(240,237,232,0.2); text-align: center; }
-@media (max-width: 720px) { .modal-scroll { padding: 60px 20px 40px; } .storyboard-item { grid-template-columns: 1fr; gap: 6px; } }
-
-</style>
-</head>
-<body>
-
-<!-- Navigation Dots -->
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",sans-serif;background:#0a0a0a;color:#f0ede8;overflow-x:hidden}
+.scroll-container{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+.scroll-container::-webkit-scrollbar{display:none}
+.section{position:relative;min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 40px;overflow:hidden}
+.nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:14px}
+.nav-dots a{display:block;width:8px;height:8px;border-radius:50%;background:rgba(240,237,232,.25);transition:all .4s;text-decoration:none}
+.nav-dots a:hover,.nav-dots a.active{background:#c9a84c;box-shadow:0 0 12px rgba(201,168,76,.4);transform:scale(1.3)}
+.video-bg{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.5}
+.video-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(10,10,10,.85),rgba(10,10,10,.5),rgba(10,10,10,.85));z-index:1}
+#hero{text-align:center}#hero .content{position:relative;z-index:2;max-width:900px}
+#hero .subtitle-top{font-size:13px;letter-spacing:6px;text-transform:uppercase;color:#c9a84c;margin-bottom:30px;font-weight:300}
+#hero h1{font-size:clamp(36px,6vw,72px);font-weight:200;letter-spacing:4px;line-height:1.2;margin-bottom:20px}
+#hero h1 strong{font-weight:400;color:#c9a84c}
+#hero .subtitle{font-size:clamp(14px,2vw,22px);font-weight:200;letter-spacing:3px;color:rgba(240,237,232,.6);margin-bottom:40px}
+#hero .year{font-size:12px;letter-spacing:4px;color:rgba(240,237,232,.3)}
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(240,237,232,.35);font-size:11px;letter-spacing:2px;animation:float 2s ease-in-out infinite}
+.scroll-hint .arrow{width:16px;height:16px;border-right:1px solid;border-bottom:1px solid;transform:rotate(45deg)}
+@keyframes float{0%,100%{transform:translateX(-50%)translateY(0)}50%{transform:translateX(-50%)translateY(-8px)}}
+.section-title{position:relative;z-index:2;font-size:clamp(32px,5vw,56px);font-weight:200;letter-spacing:4px;text-align:center;margin-bottom:16px}
+.section-title em{font-style:normal;color:#c9a84c;font-weight:300}
+.section-divider{position:relative;z-index:2;width:40px;height:1px;background:#c9a84c;margin:0 auto 24px}
+.section-subtitle{position:relative;z-index:2;font-size:clamp(13px,1.5vw,18px);font-weight:200;letter-spacing:3px;color:rgba(240,237,232,.5);text-align:center;margin-bottom:50px}
+#about .about-text{position:relative;z-index:2;max-width:700px;font-size:clamp(14px,1.6vw,18px);font-weight:200;line-height:2;letter-spacing:1px;text-align:center;color:rgba(240,237,232,.75)}
+.grid-4{position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;max-width:1000px;width:100%}
+.grid-item{text-align:center;padding:28px 20px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.015);transition:all .4s}
+.grid-item:hover{border-color:rgba(201,168,76,.25)}
+.grid-item .num{font-size:11px;letter-spacing:3px;color:#c9a84c;margin-bottom:10px}
+.grid-item h4{font-size:15px;font-weight:300;letter-spacing:1px;margin-bottom:8px}
+.grid-item p{font-size:12px;font-weight:200;letter-spacing:.5px;color:rgba(240,237,232,.5);line-height:1.7}
+.cases-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:1100px;width:100%}
+.case-card{position:relative;height:340px;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:all .4s}
+.case-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-4px)}
+.case-card video{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.5;transition:opacity .5s}
+.case-card:hover video{opacity:.7}
+.case-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(0deg,rgba(10,10,10,.9),rgba(10,10,10,.2),rgba(10,10,10,.1));z-index:1}
+.case-content{position:absolute;bottom:0;left:0;right:0;padding:24px;z-index:2}
+.case-label{font-size:10px;letter-spacing:4px;color:#c9a84c;margin-bottom:8px}
+.case-content h3{font-size:17px;font-weight:300;letter-spacing:1px;margin-bottom:6px}
+.case-desc{font-size:12px;font-weight:200;letter-spacing:.5px;color:rgba(240,237,232,.55);line-height:1.5}
+.case-click-hint{position:absolute;top:16px;right:16px;z-index:3;font-size:10px;letter-spacing:2px;color:rgba(201,168,76,.5);border:1px solid rgba(201,168,76,.2);padding:4px 10px;border-radius:2px;transition:all .3s;opacity:.6}
+.case-card:hover .case-click-hint{opacity:1;color:#c9a84c;border-color:rgba(201,168,76,.4)}
+#footer{text-align:center}
+#footer .footer-content{position:relative;z-index:2;max-width:600px}
+#footer h2{font-size:clamp(24px,3vw,40px);font-weight:200;letter-spacing:4px;margin-bottom:16px}
+#footer h2 strong{font-weight:300;color:#c9a84c}
+#footer .footer-sub{font-size:13px;font-weight:200;letter-spacing:2px;color:rgba(240,237,232,.4);margin-bottom:40px}
+#footer .footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+#footer .footer-links a{color:rgba(240,237,232,.3);text-decoration:none;font-size:12px;letter-spacing:2px;transition:color .3s}
+#footer .footer-links a:hover{color:#c9a84c}
+#footer .copyright{margin-top:50px;font-size:10px;letter-spacing:2px;color:rgba(240,237,232,.15)}
+.fade-in{opacity:0;transform:translateY(30px);transition:all .8s}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;background:rgba(5,5,5,.92);display:none;justify-content:center;align-items:flex-start;opacity:0;transition:opacity .4s}
+.modal-overlay.show{display:flex;opacity:1}
+.modal-close{position:fixed;top:30px;right:30px;z-index:1001;width:44px;height:44px;cursor:pointer;background:none;border:none;color:#f0ede8;font-size:28px;opacity:.4;transition:all .3s;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{opacity:1;color:#c9a84c;transform:rotate(90deg)}
+.modal-bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1;opacity:.15}
+.modal-scroll{width:100%;height:100vh;overflow-y:auto;padding:80px 48px 60px;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2)transparent}
+.modal-scroll::-webkit-scrollbar{width:4px}
+.modal-scroll::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px}
+.modal-inner{max-width:960px;margin:0 auto}
+.modal-header{margin-bottom:40px}.modal-header .case-number{font-size:11px;letter-spacing:5px;color:#c9a84c;margin-bottom:12px}
+.modal-header h2{font-size:clamp(28px,4vw,44px);font-weight:200;letter-spacing:3px;margin-bottom:10px}
+.modal-header .core-idea{font-size:14px;font-weight:200;letter-spacing:1px;color:rgba(240,237,232,.55);line-height:1.8}
+.modal-header .core-idea strong{color:#c9a84c;font-weight:300}
+.storyboard{display:flex;flex-direction:column;gap:12px}
+.storyboard-item{display:grid;grid-template-columns:70px 1fr;gap:16px;padding:16px 20px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.015);transition:all .3s}
+.storyboard-item:hover{border-color:rgba(201,168,76,.2)}
+.storyboard-item .shot-time{font-size:11px;letter-spacing:1px;color:#c9a84c;font-weight:300;padding-top:2px}
+.storyboard-item .shot-desc{font-size:13px;font-weight:200;line-height:1.7;color:rgba(240,237,232,.7)}
+.storyboard-item .shot-desc .tag{display:inline-block;font-size:10px;letter-spacing:1px;color:#c9a84c;border:1px solid rgba(201,168,76,.2);padding:1px 8px;border-radius:2px;margin-right:6px}
+.modal-section-title{font-size:13px;letter-spacing:3px;color:#c9a84c;margin:36px 0 16px;font-weight:300}
+.modal-aida{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:4px}
+.aida-item{padding:16px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.01)}
+.aida-item .aida-label{font-size:10px;letter-spacing:3px;color:#c9a84c;margin-bottom:6px}
+.aida-item p{font-size:12px;font-weight:200;color:rgba(240,237,232,.5);line-height:1.6}
+.keyframes-grid{margin-top:4px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.keyframe-item{padding:12px 14px;border:1px solid rgba(255,255,255,.06);font-size:12px;font-weight:200;line-height:1.6;color:rgba(240,237,232,.6)}
+.keyframe-item .kf-num{display:inline-block;font-size:10px;color:#c9a84c;border:1px solid rgba(201,168,76,.2);padding:0 6px;margin-right:6px;border-radius:2px}
+.modal-footer-text{margin-top:32px;font-size:11px;letter-spacing:1px;color:rgba(240,237,232,.2);text-align:center}
+@media(max-width:720px){.modal-scroll{padding:60px 20px 40px}.storyboard-item{grid-template-columns:1fr;gap:6px}}
+</style></head><body>
 <nav class="nav-dots" id="navDots">
-  <a href="#hero" class="active"></a>
-  <a href="#about"></a>
-  <a href="#concept"></a>
-  <a href="#tech"></a>
-  <a href="#highlights"></a>
-  <a href="#cases"></a>
-  <a href="#data"></a>
-  <a href="#footer"></a>
+<a href="#hero"></a><a href="#about"></a><a href="#concept"></a><a href="#highlights"></a><a href="#cases"></a><a href="#tech"></a><a href="#data"></a><a href="#footer"></a>
 </nav>
-
-<!-- Scroll Container -->
+<div class="modal-overlay" id="modalOverlay"><button class="modal-close" id="modalClose">&#x2715;</button>
+<video class="modal-bg-video" id="modalBgVideo" autoplay muted loop playsinline></video>
+<div class="modal-scroll" id="modalScroll"><div class="modal-inner" id="modalInner"></div></div></div>
 <div class="scroll-container" id="scrollContainer">
-
-  <!-- ==================== HERO ==================== -->
-  <section class="section" id="hero">
-    <video class="video-bg" autoplay muted loop playsinline>
-      <source src="videos/hero-bg.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
-    <div class="content fade-in">
-      <div class="subtitle-top">AI &#183; CREATIVE &#183; STRATEGY</div>
-      <h1>我在<strong>西子湖畔</strong></h1>
-      <div class="subtitle">直播间TVC创意与AI实践方案</div>
-      <div class="year">2026 &#183; 十惠鸭品牌</div>
-    </div>
-    <div class="scroll-hint">
-      <span>向下探索</span>
-      <div class="arrow"></div>
-    </div>
-  </section>
-
-  <!-- ==================== BACKGROUND ==================== -->
-  <section class="section" id="about" style="background:#0a0a0a;">
-    <div class="section-title fade-in">关于<em>方案</em></div>
-    <div class="section-divider"></div>
-    <div class="bg-text fade-in">
-      <p>AI赋能品牌传播新纪元。本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。</p>
-    </div>
-  </section>
-
-  <!-- ==================== GOALS ==================== -->
-  <section class="section" id="concept">
-    <div class="section-title fade-in">核心<em>创意</em></div>
-    <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">AIDA法则驱动的品牌叙事模型</div>
-    <div class="concept-grid">
-      <div class="concept-item fade-in">
-        <div class="number">01</div>
-        <h3>品牌强关联</h3>
-        <p>让消费者在提到直播间时，能够清晰地联想到品牌</p>
-      </div>
-      <div class="concept-item fade-in">
-        <div class="number">02</div>
-        <h3>传播破圈</h3>
-        <p>通过高品质内容制造话题，突破原有粉丝圈层</p>
-      </div>
-      <div class="concept-item fade-in">
-        <div class="number">03</div>
-        <h3>技术创新</h3>
-        <p>以AI技术赋能创意，实现降本增效与规模化产出</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== WORKFLOW ==================== -->
-  <section class="section" id="tech">
-    <div class="section-title fade-in">技术<em>实现</em></div>
-    <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">AI全链路创作工具链</div>
-
-    <div class="workflow-steps">
-      <div class="step-item fade-in">
-        <div class="step-num">01</div>
-        <div class="step-text">
-          <h4>角色与脚本</h4>
-          <p>AI辅助角色形象设计 + 故事脚本大纲生成</p>
-        </div>
-      </div>
-      <div class="step-item fade-in">
-        <div class="step-num">02</div>
-        <div class="step-text">
-          <h4>视觉规划表</h4>
-          <p>16:9电影制作板，统一镜头、色彩与环境风格</p>
-        </div>
-      </div>
-      <div class="step-item fade-in">
-        <div class="step-num">03</div>
-        <div class="step-text">
-          <h4>分镜生成</h4>
-          <p>AI按脚本自动生成分镜画面，把控叙事节奏</p>
-        </div>
-      </div>
-      <div class="step-item fade-in">
-        <div class="step-num">04</div>
-        <div class="step-text">
-          <h4>视频生成</h4>
-          <p>采用即梦、Seedance等工具，将分镜转化为动态影像</p>
-        </div>
-      </div>
-      <div class="step-item fade-in">
-        <div class="step-num">05</div>
-        <div class="step-text">
-          <h4>后期合成</h4>
-          <p>AI辅助剪辑、调色、音效匹配，提升成片质感</p>
-        </div>
-      </div>
-      <div class="step-item fade-in">
-        <div class="step-num">06</div>
-        <div class="step-text">
-          <h4>成本优化</h4>
-          <p>模型选型 + 成本控制策略，实现规模化产出</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== AIDA ==================== -->
-  <section class="section" id="highlights">
-    <div class="section-title fade-in">方案<em>亮点</em></div>
-    <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">四大核心价值</div>
-    <div class="aida-grid">
-      <div class="aida-card fade-in">
-        <div class="letter">A</div>
-        <h4>引起注意</h4>
-        <p>通过强烈的视觉冲击或悬念，在第一秒留住观众</p>
-      </div>
-      <div class="aida-card fade-in">
-        <div class="letter">I</div>
-        <h4>激发兴趣</h4>
-        <p>提供有价值的信息，让故事产生代入感</p>
-      </div>
-      <div class="aida-card fade-in">
-        <div class="letter">D</div>
-        <h4>唤起欲望</h4>
-        <p>展示美好愿景，让观众渴望拥有</p>
-      </div>
-      <div class="aida-card fade-in">
-        <div class="letter">A</div>
-        <h4>促成行动</h4>
-        <p>给出明确的行动指令，完成互动闭环</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== CASES ==================== -->
-  <section class="section" id="cases">
-    <div class="section-title fade-in">案例<em>实践</em></div>
-    <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">点击卡片查看详细分镜与创意解析</div>
-    <div class="cases-grid">
-      <div class="case-card fade-in" data-case="1">
-        <video autoplay muted loop playsinline poster="images/ppt_04.jpg">
-          <source src="videos/case-1.mp4" type="video/mp4">
-        </video>
-        <div class="case-overlay"></div>
-        <div class="case-click-hint">查看详情 &#x279E;</div>
-        <div class="case-content">
-          <div class="case-label">CASE 01</div>
-          <h3>西子湖畔 · 福利召唤</h3>
-          <p class="case-desc">新中式意境融合，白蛇传说与直播间福利的创意碰撞</p>
-        </div>
-      </div>
-      <div class="case-card fade-in" data-case="2">
-        <video autoplay muted loop playsinline poster="images/ppt_05.jpg">
-          <source src="videos/case-2.mp4" type="video/mp4">
-        </video>
-        <div class="case-overlay"></div>
-        <div class="case-click-hint">查看详情 &#x279E;</div>
-        <div class="case-content">
-          <div class="case-label">CASE 02</div>
-          <h3>十惠鸭 · 荷间寻惠</h3>
-          <p class="case-desc">水墨江南意境，十惠鸭泛舟西湖寻找福利的故事</p>
-        </div>
-      </div>
-      <div class="case-card fade-in" data-case="3">
-        <video autoplay muted loop playsinline poster="images/ppt_17.jpg">
-          <source src="videos/case-3.mp4" type="video/mp4">
-        </video>
-        <div class="case-overlay"></div>
-        <div class="case-click-hint">查看详情 &#x279E;</div>
-        <div class="case-content">
-          <div class="case-label">CASE 03</div>
-          <h3>湖畔端午 · 破五毒</h3>
-          <p class="case-desc">武侠风格创意，十惠鸭端午破五毒的趣味叙事</p>
-        </div>
-      </div>
-      <div class="case-card fade-in" data-case="4">
-        <video autoplay muted loop playsinline poster="images/ppt_06.png">
-          <source src="videos/case-4.mp4" type="video/mp4">
-        </video>
-        <div class="case-overlay"></div>
-        <div class="case-click-hint">查看详情 &#x279E;</div>
-        <div class="case-content">
-          <div class="case-label">CASE 04</div>
-          <h3>福利一出 · 十拿九稳</h3>
-          <p class="case-desc">趣味横生的福利叙事，建立品牌与消费者的情感连接</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== COST ==================== -->
-  <section class="section" id="data">
-    <div class="section-title fade-in">数据<em>效果</em></div>
-    <div class="section-divider"></div>
-    <div class="section-subtitle fade-in">效率与成本数据</div>
-    <div class="data-grid">
-      <div class="data-item fade-in">
-        <div class="cost-value">5x</div>
-        <div class="cost-label">制作效率提升</div>
-      </div>
-      <div class="data-item fade-in">
-        <div class="cost-value">70%</div>
-        <div class="cost-label">成本降低</div>
-      </div>
-      <div class="data-item fade-in">
-        <div class="cost-value">4K</div>
-        <div class="cost-label">高清画质输出</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ==================== FOOTER ==================== -->
-  <section class="section" id="footer">
-    <video class="video-bg" autoplay muted loop playsinline poster="images/poster-footer.jpg">
-      <source src="videos/footer-bg.mp4" type="video/mp4">
-    </video>
-    <div class="video-overlay"></div>
-    <div class="footer-text">
-      <h2 class="fade-in">我在<em>西子湖畔</em></h2>
-      <p class="fade-in">AI赋能品牌传播新纪元</p>
-      <br><br>
-      <p style="font-size:11px; color:rgba(240,237,232,0.2);">2026 · 湖畔直播间</p>
-    </div>
-  </section>
-
+<section class="section" id="hero">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/hero-bg.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="content fade-in">
+<div class="subtitle-top">AI &#183; CREATIVE &#183; STRATEGY</div>
+<h1>我在<strong>西子湖畔</strong></h1>
+<div class="subtitle">直播间TVC创意与AI实践方案</div>
+<div class="year">2026 &#183; 十惠鸭品牌</div>
 </div>
-
+<div class="scroll-hint"><span>向下探索</span><div class="arrow"></div></div>
+</section>
+<section class="section" id="about">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/hero-bg.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="section-title fade-in">关于<em>方案</em></div>
+<div class="section-divider"></div>
+<div class="about-text fade-in"><p>AI赋能品牌传播新纪元。本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。</p></div>
+</section>
+<section class="section" id="concept">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/case-2.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="section-title fade-in">核心<em>创意</em></div>
+<div class="section-divider"></div>
+<div class="section-subtitle fade-in">AIDA法则驱动的品牌叙事模型</div>
+<div class="grid-4">
+<div class="grid-item fade-in"><div class="num">A</div><h4>引起注意</h4><p>强烈的视觉冲击或悬念，在第一秒留住观众</p></div>
+<div class="grid-item fade-in"><div class="num">I</div><h4>激发兴趣</h4><p>结合观众痛点，让故事产生代入感</p></div>
+<div class="grid-item fade-in"><div class="num">D</div><h4>唤起欲望</h4><p>展示美好愿景，让观众渴望拥有</p></div>
+<div class="grid-item fade-in"><div class="num">A</div><h4>促成行动</h4><p>明确的行动指令，完成互动闭环</p></div>
+</div></section>
+<section class="section" id="highlights">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/case-4.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="section-title fade-in">方案<em>亮点</em></div>
+<div class="section-divider"></div>
+<div class="grid-4">
+<div class="grid-item fade-in"><div class="num">01</div><h4>AI全流程创作</h4><p>从剧本到成片，Midjourney + Runway实现"所想即所得"</p></div>
+<div class="grid-item fade-in"><div class="num">02</div><h4>AI分镜提示词公式</h4><p>【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】</p></div>
+<div class="grid-item fade-in"><div class="num">03</div><h4>统一IP视觉体系</h4><p>"十惠鸭"贯穿四个案例，打造品牌记忆锚点</p></div>
+<div class="grid-item fade-in"><div class="num">04</div><h4>低成本高效率</h4><p>成本仅为传统TVC的5%-10%，迭代速度快</p></div>
+</div></section>
+<section class="section" id="cases">
+<div class="section-title fade-in">案例<em>实践</em></div>
+<div class="section-divider"></div>
+<div class="section-subtitle fade-in">点击卡片查看详细分镜与创意解析</div>
+<div class="cases-grid" id="casesGrid">
+<div class="case-card fade-in" data-case="1">
+<video autoplay muted loop playsinline poster="images/ppt_04.jpg"><source src="videos/case-1.mp4" type="video/mp4"></video>
+<div class="case-overlay"></div><div class="case-click-hint">查看详情 &#x279E;</div>
+<div class="case-content"><div class="case-label">CASE 01</div><h3>西子湖畔 &#183; 福利召唤</h3><p class="case-desc">新中式意境融合，白蛇传说与直播间福利的创意碰撞</p></div></div>
+<div class="case-card fade-in" data-case="2">
+<video autoplay muted loop playsinline poster="images/ppt_05.jpg"><source src="videos/case-2.mp4" type="video/mp4"></video>
+<div class="case-overlay"></div><div class="case-click-hint">查看详情 &#x279E;</div>
+<div class="case-content"><div class="case-label">CASE 02</div><h3>十惠鸭 &#183; 荷间寻惠</h3><p class="case-desc">水墨江南意境，十惠鸭泛舟西湖寻找福利的故事</p></div></div>
+<div class="case-card fade-in" data-case="3">
+<video autoplay muted loop playsinline poster="images/ppt_17.jpg"><source src="videos/case-3.mp4" type="video/mp4"></video>
+<div class="case-overlay"></div><div class="case-click-hint">查看详情 &#x279E;</div>
+<div class="case-content"><div class="case-label">CASE 03</div><h3>湖畔端午 &#183; 破五毒</h3><p class="case-desc">武侠风格创意，十惠鸭端午破五毒的趣味叙事</p></div></div>
+<div class="case-card fade-in" data-case="4">
+<video autoplay muted loop playsinline poster="images/ppt_06.png"><source src="videos/case-4.mp4" type="video/mp4"></video>
+<div class="case-overlay"></div><div class="case-click-hint">查看详情 &#x279E;</div>
+<div class="case-content"><div class="case-label">CASE 04</div><h3>福利一出 &#183; 十拿九稳</h3><p class="case-desc">趣味横生的福利叙事，建立品牌与消费者的情感连接</p></div></div>
+</div></section>
+<section class="section" id="tech">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/case-3.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="section-title fade-in">技术<em>实现</em></div>
+<div class="section-divider"></div>
+<div class="grid-4">
+<div class="grid-item fade-in"><h4>AI剧本生成</h4><p>ChatGPT / 通义千问</p></div>
+<div class="grid-item fade-in"><h4>概念视觉化</h4><p>Midjourney v6</p></div>
+<div class="grid-item fade-in"><h4>视频生成</h4><p>Runway Gen-3 / Pika</p></div>
+<div class="grid-item fade-in"><h4>后期合成</h4><p>剪映专业版</p></div>
+</div></section>
+<section class="section" id="data">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/footer-bg.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="section-title fade-in">数据<em>效果</em></div>
+<div class="section-divider"></div>
+<div class="grid-4">
+<div class="grid-item fade-in"><div class="num">4支</div><h4>TVC创意短片</h4><p>全AI辅助制作</p></div>
+<div class="grid-item fade-in"><div class="num">90%</div><h4>成本降低</h4><p>相比传统TVC方案</p></div>
+<div class="grid-item fade-in"><div class="num">3-5天</div><h4>单支制作周期</h4><p>从创意到成片</p></div>
+<div class="grid-item fade-in"><div class="num">2周</div><h4>全案交付</h4><p>多版本快速迭代</p></div>
+</div></section>
+<section class="section" id="footer">
+<video class="video-bg" autoplay muted loop playsinline><source src="videos/footer-bg.mp4" type="video/mp4"></video>
+<div class="video-overlay"></div>
+<div class="footer-content fade-in">
+<h2>我在<strong>西子湖畔</strong></h2>
+<div class="footer-sub">十年深耕 &#183; 直播电商 AI 赋能</div>
+<div class="footer-links"><a href="https://github.com/ckecheng27-rgb/xizihupan-tvc" target="_blank">GitHub</a></div>
+<div class="copyright">&copy; 2026 十惠鸭品牌 &#183; 直播间TVC创意方案</div>
+</div></section>
+</div>
 <script>
-// Active nav dot tracking
-const container = document.getElementById('scrollContainer');
-const sections = document.querySelectorAll('.section');
-const dots = document.querySelectorAll('.nav-dots a');
-
-container.addEventListener('scroll', () => {
-  const scrollTop = container.scrollTop;
-  const containerHeight = container.clientHeight;
-  
-  sections.forEach((section, i) => {
-    const offset = section.offsetTop;
-    const height = section.offsetHeight;
-    if (scrollTop >= offset - containerHeight * 0.4 && 
-        scrollTop < offset + height - containerHeight * 0.4) {
-      dots.forEach(d => d.classList.remove('active'));
-      if (dots[i]) dots[i].classList.add('active');
-    }
-  });
-});
-
-// Fade-in on scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-// Smooth scroll for nav dots
-dots.forEach(dot => {
-  dot.addEventListener('click', (e) => {
-    e.preventDefault();
-    const target = document.querySelector(dot.getAttribute('href'));
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  });
-});
-</script>
-
-
-<script>
-// ========== CASE DATA ==========
-const caseData = {
-  1: {
-    number: 'CASE 01',
-    title: '西子湖畔 \u00b7 福利召唤',
-    video: 'videos/case-1.mp4',
-    coreIdea: '核心创意：<strong>新中式意境融合</strong><br>通过"十惠鸭"IP与白蛇传说的创意碰撞，将品牌福利召唤与东方美学深度融合，构建沉浸式品牌体验。',
-    aida: [
-      { label: 'A 引起注意', text: '大远景青绿山水，十惠鸭立于山巅，水墨质感拉开史诗感' },
-      { label: 'I 激发兴趣', text: '推镜至十惠鸭特写，瞳孔中"惠"字旋转放大，建立品牌符号' },
-      { label: 'D 唤起欲望', text: '蒙太奇切换福利场景，红包、折扣、赠品如浪潮般涌来' },
-      { label: 'A 促成行动', text: '十惠鸭张开翅膀，"西子湖畔直播间"浮现，画外音引导行动' }
-    ],
-    shots: [
-      { time: '0-4s', desc: '<span class="tag">大远景\u2192特写</span>山峦层叠，青绿山水。十惠鸭立于山巅俯视苍生。水墨质感，金色阳光从云缝穿透。祥云飘动，金色粒子汇聚' },
-      { time: '5-9s', desc: '<span class="tag">特写/推镜</span>推镜至十惠鸭特写，瞳孔中倒映万千金色"惠"字符号。暖金色调，流光溢彩。瞳孔中"惠"字旋转放大' },
-      { time: '10-16s', desc: '<span class="tag">蒙太奇</span>十惠鸭振翅，金色"惠"字符号如浪潮般涌向屏幕。画面分割为多个福利场景（红包、折扣、赠品）。粒子爆炸，流光旋转' },
-      { time: '17-20s', desc: '<span class="tag">中景/环绕</span>十惠鸭张开翅膀，背后巨大金色"惠"字展开，直播间界面浮现。金色粒子汇聚成"西子湖畔直播间"字样。画外音"上十惠鸭，领福利！"' }
-    ]
-  },
-  2: {
-    number: 'CASE 02',
-    title: '十惠鸭 \u00b7 荷间寻惠',
-    video: 'videos/case-2.mp4',
-    coreIdea: '核心创意：<strong>水墨江南\u00b7白蛇反转</strong><br>借用经典白蛇传IP，结合水墨江南的唯美意境，以反转剧情制造惊喜——十惠鸭被白蛇吞下后破肚而出，福利如天女散花。',
-    aida: [
-      { label: 'A 引起注意', text: '烟雨朦胧的江南水乡，十惠鸭泛舟碧波，静谧唯美引人入胜' },
-      { label: 'I 激发兴趣', text: '白蛇破水而出，危机降临，剧情急转直下' },
-      { label: 'D 唤起欲望', text: '十惠鸭破蛇腹而出，万千红包从天而降，视觉高潮' },
-      { label: 'A 促成行动', text: '福利满屏绽放，引导进入直播间领取福利' }
-    ],
-    shots: [
-      { time: '0-6s', desc: '<span class="tag">全景/慢速横移</span>十惠鸭泛舟碧波之上，远山淡影，江南烟雨蒙蒙。氛围静谧唯美。音效：雨滴声+轻柔琵琶曲' },
-      { time: '6-10s', desc: '<span class="tag">中景/快速推镜</span>湖面突然被打破，漩涡中白蛇身影探头逼近十惠鸭。紧张神秘，暗流涌动。琵琶转急促，水花炸裂声' },
-      { time: '10-11s', desc: '<span class="tag">特写/极速切换</span>白蛇一口吞下十惠鸭，水面恢复平静。短促有力，戏剧性十足。吞咽声+心跳暂停' },
-      { time: '11-15s', desc: '<span class="tag">远景/快速拉远</span>十惠鸭冲破白蛇肚皮，白蛇裂开化作万千红包从天而降。盛大狂欢，色彩绚丽。现代电子音乐+欢呼声' }
-    ]
-  },
-  3: {
-    number: 'CASE 03',
-    title: '湖畔端午 \u00b7 破五毒',
-    video: 'videos/case-3.mp4',
-    coreIdea: '核心创意：<strong>武侠风格\u00b7端午破五毒</strong><br>古风卷轴展开，十惠鸭化身江湖侠客，以水墨意境穿越端午，剑指五毒（蝎、蛇、蜈蚣、壁虎、蟾蜍），红包退敌，福运满屏。',
-    aida: [
-      { label: 'A 引起注意', text: '古风卷轴展开，水墨意境瞬间抓住眼球' },
-      { label: 'I 激发兴趣', text: '十惠鸭从画卷飞出，面对五毒，江湖对峙' },
-      { label: 'D 唤起欲望', text: '十惠鸭抛出红包，五毒被击退，福运降临' },
-      { label: 'A 促成行动', text: '端午祈福，福运满屏，引导品牌互动' }
-    ],
-    isKeyframes: true,
-    keyframes: [
-      '画卷入画 — 古风卷轴展开，水墨意境展开西湖美景',
-      '水墨穿越 — 十惠鸭从画卷中飞出，穿越水墨山水',
-      '江湖对峙 — 十惠鸭持剑面对五毒（蝎、蛇、蜈蚣、壁虎、蟾蜍）',
-      '眼神特写 — 十惠鸭锐利眼神特写，准备战斗',
-      '红包亮相 — 十惠鸭抛出红包，五毒被击退',
-      '福运爆发 — 端午祈福，福运满屏，大片质感'
-    ],
-    shots: []
-  },
-  4: {
-    number: 'CASE 04',
-    title: '福利一出 \u00b7 十拿九稳',
-    video: 'videos/case-4.mp4',
-    coreIdea: '核心创意：<strong>反差幽默\u00b7钓鱼梗</strong><br>以"十拿九稳"为创意原点，用钓鱼的等待与反转来隐喻"福利十拿九稳"。十惠鸭钓鱼苦等无果，机智地用红包打窝，鱼群疯狂抢食——福利就这么稳！',
-    aida: [
-      { label: 'A 引起注意', text: '清晨西湖，薄雾弥漫，十惠鸭岸边持竿静坐，水墨淡彩' },
-      { label: 'I 激发兴趣', text: '鱼漂纹丝不动，十惠鸭无奈等待，轻松诙谐引人会心一笑' },
-      { label: 'D 唤起欲望', text: '灵光一闪！十惠鸭用红包打窝，金色光芒照亮湖面' },
-      { label: 'A 促成行动', text: '鱼群跃出水面争抢红包，十惠鸭抱礼物大笑，福利十拿九稳' }
-    ],
-    shots: [
-      { time: '0-3s', desc: '<span class="tag">大远景/慢速升起</span>清晨西湖，薄雾弥漫，垂柳依依。宁静致远，水墨淡彩' },
-      { time: '4-9s', desc: '<span class="tag">中景/固定机位</span>十惠鸭持钓竿，双目无神，鱼漂纹丝不动。轻松诙谐' },
-      { time: '10-12s', desc: '<span class="tag">水下/快速推进</span>水下一条鱼用嘲弄的眼神看着十惠鸭，嘴里吐泡泡。短促有力，趣味十足' },
-      { time: '13-15s', desc: '<span class="tag">特写/急速推镜</span>十惠鸭灵光一闪（灯泡亮起），想到用红包打窝！剧情转折，画面偏冷转暖' },
-      { time: '16-19s', desc: '<span class="tag">全景/俯拍</span>十惠鸭从怀中掏出大量红包撒入水中，水面泛起金色光芒' },
-      { time: '20-23s', desc: '<span class="tag">远景/快速拉起</span>无数鱼群跃出水面争抢红包，十惠鸭抱着一堆礼物哈哈大笑。辉煌大结局' }
-    ]
-  }
+var C={1:{n:"CASE 01",t:"西子湖畔 · 福利召唤",v:"videos/case-1.mp4",
+c:'<strong>新中式意境融合</strong><br>将品牌福利召唤与东方美学深度融合',
+a:[{l:"A 引起注意",d:"大远景青绿山水，十惠鸭立于山巅"},{l:"I 激发兴趣",d:"瞳孔中惠字旋转放大"},{l:"D 唤起欲望",d:"福利场景如浪潮涌来"},{l:"A 促成行动",d:"西子湖畔直播间浮现"}],
+s:[{g:"0-4s",d:'<span class="tag">远景→特写</span>山峦层叠，十惠鸭立于山巅，金色阳光穿透云缝'},{g:"5-9s",d:'<span class="tag">特写/推镜</span>瞳孔中万千金色惠字旋转放大'},{g:"10-16s",d:'<span class="tag">蒙太奇</span>惠字如浪潮涌向屏幕，画面分割多个福利场景'},{g:"17-20s",d:'<span class="tag">中景/环绕</span>金色惠字展开，直播间浮现'}]},
+2:{n:"CASE 02",t:"十惠鸭 · 荷间寻惠",v:"videos/case-2.mp4",
+c:'<strong>水墨江南·白蛇反转</strong><br>十惠鸭被白蛇吞下后破肚而出，福利如天女散花',
+a:[{l:"A 引起注意",d:"烟雨朦胧，十惠鸭泛舟碧波"},{l:"I 激发兴趣",d:"白蛇破水而出"},{l:"D 唤起欲望",d:"红包从天而降"},{l:"A 促成行动",d:"引导进入直播间"}],
+s:[{g:"0-6s",d:'<span class="tag">全景/横移</span>十惠鸭泛舟碧波，远山淡影，雨滴声+琵琶曲'},{g:"6-10s",d:'<span class="tag">中景/推镜</span>白蛇破水而出，紧张神秘'},{g:"10-11s",d:'<span class="tag">特写</span>白蛇吞下十惠鸭，戏剧性十足'},{g:"11-15s",d:'<span class="tag">远景/拉远</span>十惠鸭破蛇腹而出，白蛇化作红包'}]},
+3:{n:"CASE 03",t:"湖畔端午 · 破五毒",v:"videos/case-3.mp4",
+c:'<strong>武侠风格·端午破五毒</strong><br>十惠鸭化身江湖侠客，红包退敌福运满屏',
+k:true,f:["画卷入画—古风卷轴展开","水墨穿越—十惠鸭从画卷飞出","江湖对峙—持剑面对五毒","眼神特写—锐利眼神准备战斗","红包亮相—抛出红包五毒击退","福运爆发—端午祈福福运满屏"],
+a:[{l:"A 引起注意",d:"古风卷轴展开"},{l:"I 激发兴趣",d:"面对五毒"},{l:"D 唤起欲望",d:"抛出红包"},{l:"A 促成行动",d:"端午祈福"}],
+s:[]},
+4:{n:"CASE 04",t:"福利一出 · 十拿九稳",v:"videos/case-4.mp4",
+c:'<strong>反差幽默·钓鱼梗</strong><br>十惠鸭苦等无果，用红包打窝，鱼群疯狂抢食',
+a:[{l:"A 引起注意",d:"清晨西湖十惠鸭持竿静坐"},{l:"I 激发兴趣",d:"鱼漂不动"},{l:"D 唤起欲望",d:"用红包打窝"},{l:"A 促成行动",d:"鱼群跃出水面"}],
+s:[{g:"0-3s",d:'<span class="tag">大远景</span>清晨西湖薄雾弥漫'},{g:"4-9s",d:'<span class="tag">中景</span>十惠鸭苦等鱼漂不动'},{g:"10-12s",d:'<span class="tag">水下</span>鱼用嘲弄眼神看十惠鸭'},{g:"13-15s",d:'<span class="tag">特写</span>灵光一闪用红包打窝'},{g:"16-19s",d:'<span class="tag">全景</span>撒出红包金色光芒'},{g:"20-23s",d:'<span class="tag">远景</span>鱼群跃出水面抢红包'}]}
 };
-
-// ========== MODAL ==========
-const overlay = document.getElementById('modalOverlay');
-const closeBtn = document.getElementById('modalClose');
-const inner = document.getElementById('modalInner');
-const bgVideo = document.getElementById('modalBgVideo');
-const scrollContainer = document.getElementById('scrollContainer');
-
-function openCase(num) {
-  const d = caseData[num];
-  if (!d) return;
-  
-  bgVideo.src = d.video;
-  bgVideo.play().catch(() => {});
-  
-  let shotsHtml = '';
-  if (d.isKeyframes && d.keyframes) {
-    shotsHtml = '<div class="keyframes-grid">';
-    d.keyframes.forEach((kf, i) => {
-      shotsHtml += '<div class="keyframe-item"><span class="kf-num">KF ' + (i+1) + '</span>' + kf + '</div>';
-    });
-    shotsHtml += '</div>';
-  } else if (d.shots) {
-    shotsHtml = '<div class="storyboard">';
-    d.shots.forEach(s => {
-      shotsHtml += '<div class="storyboard-item"><div class="shot-time">' + s.time + '</div><div class="shot-desc">' + s.desc + '</div></div>';
-    });
-    shotsHtml += '</div>';
-  }
-  
-  let aidaHtml = '<div class="modal-aida">';
-  if (d.aida) {
-    d.aida.forEach(a => {
-      aidaHtml += '<div class="aida-item"><div class="aida-label">' + a.label + '</div><p>' + a.text + '</p></div>';
-    });
-  }
-  aidaHtml += '</div>';
-  
-  inner.innerHTML =
-    '<div class="modal-header">' +
-      '<div class="case-number">' + d.number + '</div>' +
-      '<h2>' + d.title + '</h2>' +
-      '<div class="core-idea">' + d.coreIdea + '</div>' +
-    '</div>' +
-    '<div class="modal-section-title">\u2501 分镜脚本</div>' +
-    shotsHtml +
-    '<div class="modal-section-title">\u2501 AIDA 叙事拆解</div>' +
-    aidaHtml +
-    '<div class="modal-footer-text">\u2756 点击空白处关闭</div>';
-  
-  overlay.classList.add('show');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => { overlay.style.opacity = '1'; }, 10);
-}
-
-function closeModal() {
-  overlay.style.opacity = '0';
-  setTimeout(() => {
-    overlay.classList.remove('show');
-    document.body.style.overflow = '';
-    bgVideo.pause();
-    bgVideo.src = '';
-  }, 300);
-}
-
-// Click cards
-document.querySelectorAll('.case-card').forEach(card => {
-  card.addEventListener('click', function(e) {
-    const num = parseInt(this.dataset.case);
-    if (num) openCase(num);
-  });
-});
-
-// Close on click outside / close btn
-closeBtn.addEventListener('click', closeModal);
-overlay.addEventListener('click', function(e) {
-  if (e.target === overlay || e.target.classList.contains('modal-scroll')) {
-    closeModal();
-  }
-});
-
-// Close on Escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && overlay.classList.contains('show')) closeModal();
-});
-
-// ========== NAV DOTS ACTIVE ==========
-const sections = document.querySelectorAll('.section');
-const dots = document.querySelectorAll('.nav-dots a');
-
-function updateActiveDot() {
-  let current = 0;
-  sections.forEach((sec, i) => {
-    const rect = sec.getBoundingClientRect();
-    if (rect.top <= window.innerHeight/2) current = i;
-  });
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === current);
-  });
-}
-
-scrollContainer.addEventListener('scroll', updateActiveDot);
-updateActiveDot();
-
-// ========== FADE IN ==========
-const faders = document.querySelectorAll('.fade-in');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.1 });
-faders.forEach(el => observer.observe(el));
-</script>
-
-</body>
-</html>
+var O=document.getElementById("modalOverlay"),B=document.getElementById("modalClose"),I=document.getElementById("modalInner"),V=document.getElementById("modalBgVideo"),S=document.getElementById("scrollContainer");
+function openCase(n){var d=C[n];if(!d)return;V.src=d.v;V.play().catch(function(){});
+var sh="";if(d.k&&d.f){sh='<div class="keyframes-grid">';for(var i=0;i<d.f.length;i++){sh+='<div class="keyframe-item"><span class="kf-num">KF '+(i+1)+"</span>"+d.f[i]+"</div>"}sh+="</div>";}else if(d.s&&d.s.length){sh='<div class="storyboard">';for(var j=0;j<d.s.length;j++){sh+='<div class="storyboard-item"><div class="shot-time">'+d.s[j].g+'</div><div class="shot-desc">'+d.s[j].d+"</div></div>"}sh+="</div>";}
+var ah='<div class="modal-aida">';for(var k=0;k<d.a.length;k++){ah+='<div class="aida-item"><div class="aida-label">'+d.a[k].l+'</div><p>'+d.a[k].d+"</p></div>"}ah+="</div>";
+I.innerHTML='<div class="modal-header"><div class="case-number">'+d.n+'</div><h2>'+d.t+'</h2><div class="core-idea">'+d.c+'</div></div><div class="modal-section-title">━ 分镜脚本</div>'+sh+'<div class="modal-section-title">━ AIDA 叙事拆解</div>'+ah+'<div class="modal-footer-text">❖ 点击空白处关闭</div>';
+O.classList.add("show");document.body.style.overflow="hidden";setTimeout(function(){O.style.opacity="1"},10);}
+function closeModal(){O.style.opacity="0";setTimeout(function(){O.classList.remove("show");document.body.style.overflow="";V.pause();V.src=""},300);}
+B.addEventListener("click",closeModal);
+O.addEventListener("click",function(e){if(e.target===O||e.target.classList.contains("modal-scroll"))closeModal()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&O.classList.contains("show"))closeModal()});
+document.querySelectorAll(".case-card").forEach(function(c){c.addEventListener("click",function(){var n=parseInt(this.dataset.case);if(n)openCase(n)})});
+var sec=document.querySelectorAll(".section"),dot=document.querySelectorAll(".nav-dots a");
+function upd(){var cur=0;sec.forEach(function(s,i){var r=s.getBoundingClientRect();if(r.top<=window.innerHeight/2)cur=i});dot.forEach(function(d,i){d.classList.toggle("active",i===cur)})}
+S.addEventListener("scroll",upd);upd();
+var fd=document.querySelectorAll(".fade-in"),ob=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add("visible")})},{threshold:.1});
+fd.forEach(function(e){ob.observe(e)});
+</script></body></html>
