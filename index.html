@@ -226,4 +226,58 @@ function upd(){var cur=0;sec.forEach(function(s,i){var r=s.getBoundingClientRect
 S.addEventListener("scroll",upd);upd();
 var fd=document.querySelectorAll(".fade-in"),ob=new IntersectionObserver(function(e){e.forEach(function(e){if(e.isIntersecting)e.target.classList.add("visible")})},{threshold:.1});
 fd.forEach(function(e){ob.observe(e)});
+// ========== CONFIG OVERRIDE ==========
+(function(){
+try{var s=localStorage.getItem('xizihupan_config');if(!s)return;
+var c=JSON.parse(s);
+var byId=function(id){return document.getElementById(id)};
+if(c.hero){
+  var h=document.querySelector('#hero h1');if(h&&c.hero.title1&&c.hero.title2)h.innerHTML=c.hero.title1+'<strong>'+c.hero.title2+'</strong>';
+  var st=document.querySelector('#hero .subtitle');if(st&&c.hero.subtitle)st.textContent=c.hero.subtitle;
+  var yr=document.querySelector('#hero .year');if(yr&&c.hero.year)yr.innerHTML=c.hero.year;
+  var hv=document.querySelector('#hero .video-bg source');if(hv&&c.hero.video)hv.src=c.hero.video;
+}
+if(c.about){
+  var at=document.querySelector('#about .section-title em');if(at&&c.about.title)at.textContent=c.about.title.replace('关于','');
+  var ae=document.querySelector('#about .about-text p');if(ae&&c.about.text)ae.innerHTML=c.about.text;
+  var av=document.querySelector('#about .video-bg source');if(av&&c.about.video)av.src=c.about.video;
+}
+if(c.concept){
+  var ct=document.querySelector('#concept .section-title em');if(ct&&c.concept.title)ct.textContent=c.concept.title.replace('核心','');
+  var cs=document.querySelector('#concept .section-subtitle');if(cs&&c.concept.subtitle)cs.textContent=c.concept.subtitle;
+  var ci=document.querySelectorAll('#concept .grid-item');if(ci.length&&c.concept.items){for(var i=0;i<ci.length&&i<c.concept.items.length;i++){var n=ci[i].querySelector('.num');if(n)n.textContent=c.concept.items[i].num;var t=ci[i].querySelector('h4');if(t)t.textContent=c.concept.items[i].title;var p=ci[i].querySelector('p');if(p)p.innerHTML=c.concept.items[i].desc.replace(/\\n/g,'<br>')}}
+  var cv=document.querySelector('#concept .video-bg source');if(cv&&c.concept.video)cv.src=c.concept.video;
+}
+if(c.highlights){
+  var ht=document.querySelector('#highlights .section-title em');if(ht&&c.highlights.title)ht.textContent=c.highlights.title.replace('方案','');
+  var hi=document.querySelectorAll('#highlights .grid-item');if(hi.length&&c.highlights.items){for(var i=0;i<hi.length&&i<c.highlights.items.length;i++){var n=hi[i].querySelector('.num');if(n)n.textContent=c.highlights.items[i].num;var t=hi[i].querySelector('h4');if(t)t.textContent=c.highlights.items[i].title;var p=hi[i].querySelector('p');if(p)p.textContent=c.highlights.items[i].desc}}
+  var hv=document.querySelector('#highlights .video-bg source');if(hv&&c.highlights.video)hv.src=c.highlights.video;
+}
+if(c.cases&&c.cases.length){
+  var cards=document.querySelectorAll('.case-card');
+  for(var i=0;i<cards.length&&i<c.cases.length;i++){
+    var cd=c.cases[i];
+    var cl=cards[i].querySelector('.case-label');if(cl)cl.textContent=cd.num;
+    var ct=cards[i].querySelector('h3');if(ct)ct.innerHTML=cd.title;
+    var cp=cards[i].querySelector('.case-desc');if(cp)cp.textContent=cd.desc;
+    var cv=cards[i].querySelector('video source');if(cv&&cd.video)cv.src=cd.video;
+  }
+}
+if(c.tech){
+  var tt=document.querySelector('#tech .section-title em');if(tt&&c.tech.title)tt.textContent=c.tech.title.replace('技术','');
+  var ti=document.querySelectorAll('#tech .grid-item');if(ti.length&&c.tech.items){for(var i=0;i<ti.length&&i<c.tech.items.length;i++){var t=ti[i].querySelector('h4');if(t)t.textContent=c.tech.items[i].title;var p=ti[i].querySelector('p');if(p)p.textContent=c.tech.items[i].desc}}
+  var tv=document.querySelector('#tech .video-bg source');if(tv&&c.tech.video)tv.src=c.tech.video;
+}
+if(c.data){
+  var dt=document.querySelector('#data .section-title em');if(dt&&c.data.title)dt.textContent=c.data.title.replace('数据','');
+  var di=document.querySelectorAll('#data .grid-item');if(di.length&&c.data.items){for(var i=0;i<di.length&&i<c.data.items.length;i++){var n=di[i].querySelector('.num');if(n)n.textContent=c.data.items[i].num;var t=di[i].querySelector('h4');if(t)t.textContent=c.data.items[i].title;var p=di[i].querySelector('p');if(p)p.textContent=c.data.items[i].desc}}
+  var dv=document.querySelector('#data .video-bg source');if(dv&&c.data.video)dv.src=c.data.video;
+}
+if(c.footer){
+  var fh=document.querySelector('#footer h2');if(fh&&c.footer.title1&&c.footer.title2)fh.innerHTML=c.footer.title1+'<strong>'+c.footer.title2+'</strong>';
+  var fs=document.querySelector('#footer .footer-sub');if(fs&&c.footer.subtitle)fs.innerHTML=c.footer.subtitle;
+  var fc=document.querySelector('#footer .copyright');if(fc&&c.footer.copyright)fc.innerHTML=c.footer.copyright;
+  var fv=document.querySelector('#footer .video-bg source');if(fv&&c.footer.video)fv.src=c.footer.video;
+}
+}catch(e){console.log('config error',e)}})();
 </script></body></html>

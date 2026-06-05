@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>后台管理 · 西子湖畔TVC</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC",sans-serif;background:#0a0a0a;color:#f0ede8;padding:40px 20px}
+h1{font-size:28px;font-weight:200;letter-spacing:3px;margin-bottom:8px}
+h1 strong{font-weight:400;color:#c9a84c}
+.sub{font-size:12px;color:rgba(240,237,232,.3);letter-spacing:2px;margin-bottom:40px}
+.section-card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.015);margin-bottom:20px;padding:20px 24px}
+.section-card h2{font-size:14px;font-weight:300;letter-spacing:2px;color:#c9a84c;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(201,168,76,.15)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;letter-spacing:1px;color:rgba(240,237,232,.4);margin-bottom:4px}
+.field input,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#f0ede8;padding:8px 12px;font-size:13px;font-family:inherit;transition:border .3s}
+.field input:focus,.field textarea:focus{outline:none;border-color:#c9a84c}
+.field textarea{resize:vertical;min-height:50px;line-height:1.6}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn-group{display:flex;gap:12px;margin:30px 0;flex-wrap:wrap}
+.btn{padding:10px 28px;border:1px solid #c9a84c;background:transparent;color:#c9a84c;font-size:13px;letter-spacing:2px;cursor:pointer;transition:all .3s}
+.btn:hover{background:#c9a84c;color:#0a0a0a}
+.btn-primary{background:#c9a84c;color:#0a0a0a}
+.btn-primary:hover{background:transparent;color:#c9a84c}
+.btn-danger{border-color:rgba(255,80,80,.4);color:rgba(255,80,80,.7)}
+.btn-danger:hover{background:rgba(255,80,80,.1);border-color:rgba(255,80,80,.6)}
+.toast{position:fixed;top:20px;right:20px;padding:12px 24px;background:#c9a84c;color:#0a0a0a;font-size:13px;letter-spacing:1px;opacity:0;transform:translateY(-20px);transition:all .4s;z-index:999}
+.toast.show{opacity:1;transform:translateY(0)}
+.full-btn{width:100%;text-align:center;padding:14px;margin-top:8px}
+pre{font-size:11px;color:rgba(240,237,232,.3);margin-top:20px;padding:12px;background:rgba(255,255,255,.02);max-height:200px;overflow:auto}
+@media(max-width:720px){.field-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<h1>内容<strong>管理</strong></h1>
+<div class="sub">修改文字和视频路径，保存后刷新主页面即可生效</div>
+
+<div id="app"></div>
+
+<div class="btn-group">
+<button class="btn btn-primary" onclick="saveConfig()">&#x2714; 保存配置</button>
+<button class="btn" onclick="previewConfig()">&#x1F50D; 预览配置</button>
+<button class="btn btn-danger" onclick="resetConfig()">&#x21BA; 恢复默认</button>
+</div>
+<pre id="preview"></pre>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// Default config
+var DEFAULT = {
+  hero: {
+    title1: '我在',
+    title2: '西子湖畔',
+    subtitle: '直播间TVC创意与AI实践方案',
+    year: '2026 &#183; 十惠鸭品牌',
+    video: 'videos/hero-bg.mp4'
+  },
+  about: {
+    title: '关于方案',
+    text: 'AI赋能品牌传播新纪元。本方案以"十惠鸭"IP为核心，融合江南水墨意境与AI技术，打造4支风格各异的TVC短片。从白蛇传说、端午民俗到江湖武侠、反差幽默，用AI重新定义品牌叙事。',
+    video: 'videos/hero-bg.mp4'
+  },
+  concept: {
+    title: '核心创意',
+    subtitle: 'AIDA法则驱动的品牌叙事模型',
+    items: [
+      {num:'A',title:'引起注意',desc:'强烈的视觉冲击或悬念，在第一秒留住观众'},
+      {num:'I',title:'激发兴趣',desc:'结合观众痛点，让故事产生代入感'},
+      {num:'D',title:'唤起欲望',desc:'展示美好愿景，让观众渴望拥有'},
+      {num:'A',title:'促成行动',desc:'明确的行动指令，完成互动闭环'}
+    ],
+    video: 'videos/case-2.mp4'
+  },
+  highlights: {
+    title: '方案亮点',
+    items: [
+      {num:'01',title:'AI全流程创作',desc:'从剧本到成片，Midjourney + Runway实现"所想即所得"'},
+      {num:'02',title:'AI分镜提示词公式',desc:'【镜头类型】+【运镜方式】+【主体】+【环境】+【氛围】'},
+      {num:'03',title:'统一IP视觉体系',desc:'"十惠鸭"贯穿四个案例，打造品牌记忆锚点'},
+      {num:'04',title:'低成本高效率',desc:'成本仅为传统TVC的5%-10%，迭代速度快'}
+    ],
+    video: 'videos/case-4.mp4'
+  },
+  cases: [
+    {num:'CASE 01',title:'西子湖畔 &#183; 福利召唤',desc:'新中式意境融合，白蛇传说与直播间福利的创意碰撞',video:'videos/case-1.mp4',coreIdea:'新中式意境融合。通过十惠鸭IP与白蛇传说的创意碰撞，将品牌福利召唤与东方美学深度融合。'},
+    {num:'CASE 02',title:'十惠鸭 &#183; 荷间寻惠',desc:'水墨江南意境，十惠鸭泛舟西湖寻找福利的故事',video:'videos/case-2.mp4',coreIdea:'水墨江南·白蛇反转。借用白蛇传IP，十惠鸭被白蛇吞下后破肚而出，福利如天女散花。'},
+    {num:'CASE 03',title:'湖畔端午 &#183; 破五毒',desc:'武侠风格创意，十惠鸭端午破五毒的趣味叙事',video:'videos/case-3.mp4',coreIdea:'武侠风格·端午破五毒。十惠鸭化身江湖侠客，红包退敌福运满屏。'},
+    {num:'CASE 04',title:'福利一出 &#183; 十拿九稳',desc:'趣味横生的福利叙事，建立品牌与消费者的情感连接',video:'videos/case-4.mp4',coreIdea:'反差幽默·钓鱼梗。十惠鸭苦等无果，用红包打窝，鱼群疯狂抢食。'}
+  ],
+  tech: {
+    title: '技术实现',
+    items: [
+      {title:'AI剧本生成',desc:'ChatGPT / 通义千问'},
+      {title:'概念视觉化',desc:'Midjourney v6'},
+      {title:'视频生成',desc:'Runway Gen-3 / Pika'},
+      {title:'后期合成',desc:'剪映专业版'}
+    ],
+    video: 'videos/case-3.mp4'
+  },
+  data: {
+    title: '数据效果',
+    items: [
+      {num:'4支',title:'TVC创意短片',desc:'全AI辅助制作'},
+      {num:'90%',title:'成本降低',desc:'相比传统TVC方案'},
+      {num:'3-5天',title:'单支制作周期',desc:'从创意到成片'},
+      {num:'2周',title:'全案交付',desc:'多版本快速迭代'}
+    ],
+    video: 'videos/footer-bg.mp4'
+  },
+  footer: {
+    title1: '我在',
+    title2: '西子湖畔',
+    subtitle: '十年深耕 &#183; 直播电商 AI 赋能',
+    copyright: '&copy; 2026 十惠鸭品牌 &#183; 直播间TVC创意方案',
+    video: 'videos/footer-bg.mp4'
+  }
+};
+
+var CONFIG = loadConfig();
+
+function loadConfig(){
+  try{
+    var s=localStorage.getItem('xizihupan_config');
+    if(s) return JSON.parse(s);
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+
+function saveConfig(){
+  collectForm();
+  localStorage.setItem('xizihupan_config', JSON.stringify(CONFIG));
+  showToast('&#x2714; 配置已保存！刷新主页面查看效果');
+}
+
+function resetConfig(){
+  if(!confirm('确定恢复默认配置？')) return;
+  localStorage.removeItem('xizihupan_config');
+  CONFIG = JSON.parse(JSON.stringify(DEFAULT));
+  render();
+  showToast('&#x21BA; 已恢复默认配置');
+}
+
+function collectForm(){
+  // Hero
+  CONFIG.hero.title1 = document.getElementById('hero_title1').value;
+  CONFIG.hero.title2 = document.getElementById('hero_title2').value;
+  CONFIG.hero.subtitle = document.getElementById('hero_subtitle').value;
+  CONFIG.hero.year = document.getElementById('hero_year').value;
+  CONFIG.hero.video = document.getElementById('hero_video').value;
+  
+  // About
+  CONFIG.about.title = document.getElementById('about_title').value;
+  CONFIG.about.text = document.getElementById('about_text').value;
+  CONFIG.about.video = document.getElementById('about_video').value;
+  
+  // Concept
+  var ci = CONFIG.concept.items;
+  for(var i=0;i<ci.length;i++){
+    ci[i].title = document.getElementById('concept_t'+i).value;
+    ci[i].desc = document.getElementById('concept_d'+i).value;
+  }
+  CONFIG.concept.video = document.getElementById('concept_video').value;
+  
+  // Highlights
+  var hi = CONFIG.highlights.items;
+  for(var i=0;i<hi.length;i++){
+    hi[i].title = document.getElementById('hl_t'+i).value;
+    hi[i].desc = document.getElementById('hl_d'+i).value;
+  }
+  CONFIG.highlights.video = document.getElementById('hl_video').value;
+  
+  // Cases
+  for(var i=0;i<4;i++){
+    CONFIG.cases[i].title = document.getElementById('case_title_'+i).value;
+    CONFIG.cases[i].desc = document.getElementById('case_desc_'+i).value;
+    CONFIG.cases[i].video = document.getElementById('case_video_'+i).value;
+    CONFIG.cases[i].coreIdea = document.getElementById('case_idea_'+i).value;
+  }
+  
+  // Tech
+  var ti = CONFIG.tech.items;
+  for(var i=0;i<ti.length;i++){
+    ti[i].title = document.getElementById('tech_t'+i).value;
+    ti[i].desc = document.getElementById('tech_d'+i).value;
+  }
+  CONFIG.tech.video = document.getElementById('tech_video').value;
+  
+  // Data
+  var di = CONFIG.data.items;
+  for(var i=0;i<di.length;i++){
+    di[i].title = document.getElementById('data_t'+i).value;
+    di[i].desc = document.getElementById('data_d'+i).value;
+  }
+  CONFIG.data.video = document.getElementById('data_video').value;
+  
+  // Footer
+  CONFIG.footer.title1 = document.getElementById('footer_t1').value;
+  CONFIG.footer.title2 = document.getElementById('footer_t2').value;
+  CONFIG.footer.subtitle = document.getElementById('footer_sub').value;
+  CONFIG.footer.copyright = document.getElementById('footer_cr').value;
+  CONFIG.footer.video = document.getElementById('footer_video').value;
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.innerHTML=msg;
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},2500);
+}
+
+function previewConfig(){
+  collectForm();
+  document.getElementById('preview').textContent = JSON.stringify(CONFIG, null, 2);
+}
+
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render(){
+  var c=CONFIG;
+  var h='';
+  
+  // Hero
+  h+=section('首页 Hero',[
+    field('标题前半','hero_title1',c.hero.title1),
+    field('标题后半（粗体）','hero_title2',c.hero.title2),
+    field('副标题','hero_subtitle',c.hero.subtitle),
+    field('年份/品牌','hero_year',c.hero.year),
+    fieldV('视频路径','hero_video',c.hero.video)
+  ]);
+  
+  h+=section('关于方案',[
+    field('标题','about_title',c.about.title),
+    textarea('正文','about_text',c.about.text),
+    fieldV('视频路径','about_video',c.about.video)
+  ]);
+  
+  h+=section('核心创意 (AIDA)',[
+    fieldRow([
+      {l:'A标题',id:'concept_t0',v:c.concept.items[0].title},
+      {l:'A描述',id:'concept_d0',v:c.concept.items[0].desc}
+    ]),
+    fieldRow([
+      {l:'I标题',id:'concept_t1',v:c.concept.items[1].title},
+      {l:'I描述',id:'concept_d1',v:c.concept.items[1].desc}
+    ]),
+    fieldRow([
+      {l:'D标题',id:'concept_t2',v:c.concept.items[2].title},
+      {l:'D描述',id:'concept_d2',v:c.concept.items[2].desc}
+    ]),
+    fieldRow([
+      {l:'A2标题',id:'concept_t3',v:c.concept.items[3].title},
+      {l:'A2描述',id:'concept_d3',v:c.concept.items[3].desc}
+    ]),
+    fieldV('视频路径','concept_video',c.concept.video)
+  ]);
+  
+  h+=section('方案亮点',[
+    fieldRow([{l:'01标题',id:'hl_t0',v:c.highlights.items[0].title},{l:'01描述',id:'hl_d0',v:c.highlights.items[0].desc}]),
+    fieldRow([{l:'02标题',id:'hl_t1',v:c.highlights.items[1].title},{l:'02描述',id:'hl_d1',v:c.highlights.items[1].desc}]),
+    fieldRow([{l:'03标题',id:'hl_t2',v:c.highlights.items[2].title},{l:'03描述',id:'hl_d2',v:c.highlights.items[2].desc}]),
+    fieldRow([{l:'04标题',id:'hl_t3',v:c.highlights.items[3].title},{l:'04描述',id:'hl_d3',v:c.highlights.items[3].desc}]),
+    fieldV('视频路径','hl_video',c.highlights.video)
+  ]);
+  
+  for(var i=0;i<4;i++){
+    var cc=c.cases[i];
+    h+=section('案例 '+(i+1)+' - '+cc.title,[
+      field('案例标题','case_title_'+i,cc.title),
+      textarea('描述','case_desc_'+i,cc.desc),
+      textarea('核心创意','case_idea_'+i,cc.coreIdea),
+      fieldV('视频路径','case_video_'+i,cc.video)
+    ]);
+  }
+  
+  h+=section('技术实现',[
+    fieldRow([{l:'工具1',id:'tech_t0',v:c.tech.items[0].title},{l:'说明1',id:'tech_d0',v:c.tech.items[0].desc}]),
+    fieldRow([{l:'工具2',id:'tech_t1',v:c.tech.items[1].title},{l:'说明2',id:'tech_d1',v:c.tech.items[1].desc}]),
+    fieldRow([{l:'工具3',id:'tech_t2',v:c.tech.items[2].title},{l:'说明3',id:'tech_d2',v:c.tech.items[2].desc}]),
+    fieldRow([{l:'工具4',id:'tech_t3',v:c.tech.items[3].title},{l:'说明4',id:'tech_d3',v:c.tech.items[3].desc}]),
+    fieldV('视频路径','tech_video',c.tech.video)
+  ]);
+  
+  h+=section('数据效果',[
+    fieldRow([{l:'指标1',id:'data_t0',v:c.data.items[0].title},{l:'说明1',id:'data_d0',v:c.data.items[0].desc}]),
+    fieldRow([{l:'指标2',id:'data_t1',v:c.data.items[1].title},{l:'说明2',id:'data_d1',v:c.data.items[1].desc}]),
+    fieldRow([{l:'指标3',id:'data_t2',v:c.data.items[2].title},{l:'说明3',id:'data_d2',v:c.data.items[2].desc}]),
+    fieldRow([{l:'指标4',id:'data_t3',v:c.data.items[3].title},{l:'说明3',id:'data_d3',v:c.data.items[3].desc}]),
+    fieldV('视频路径','data_video',c.data.video)
+  ]);
+  
+  h+=section('Footer',[
+    field('标题前半','footer_t1',c.footer.title1),
+    field('标题后半（粗体）','footer_t2',c.footer.title2),
+    field('副标题','footer_sub',c.footer.subtitle),
+    textarea('版权信息','footer_cr',c.footer.copyright),
+    fieldV('视频路径','footer_video',c.footer.video)
+  ]);
+  
+  document.getElementById('app').innerHTML = h;
+}
+
+function section(title, fields){
+  var f=fields.join('\n');
+  return '<div class="section-card"><h2>'+title+'</h2>'+f+'</div>';
+}
+
+function field(label,id,val){
+  return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'"></div>';
+}
+
+function textarea(label,id,val){
+  return '<div class="field"><label>'+label+'</label><textarea id="'+id+'">'+escHtml(val||'')+'</textarea></div>';
+}
+
+function fieldV(label,id,val){
+  return '<div class="field"><label>'+label+'</label><input id="'+id+'" value="'+escHtml(val||'')+'" style="color:#c9a84c;font-family:monospace"></div>';
+}
+
+function fieldRow(pair){
+  return '<div class="field-row">'+
+    '<div class="field"><label>'+pair[0].l+'</label><input id="'+pair[0].id+'" value="'+escHtml(pair[0].v||'')+'"></div>'+
+    '<div class="field"><label>'+pair[1].l+'</label><input id="'+pair[1].id+'" value="'+escHtml(pair[1].v||'')+'"></div>'+
+  '</div>';
+}
+
+render();
+</script>
+</body></html>
