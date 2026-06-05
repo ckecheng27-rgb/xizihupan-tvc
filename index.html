@@ -80,9 +80,9 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 /* Modal – 左侧视频 + 右侧内容 */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.94);z-index:200;display:flex;opacity:0;transition:opacity .3s;pointer-events:none}
 .modal-overlay.show{pointer-events:auto}
-.modal-split{display:flex;width:100%;height:100%}
-.modal-video-panel{flex:0 0 55%;position:relative;overflow:hidden}
-.modal-video-panel video{width:100%;height:100%;object-fit:cover}
+.modal-split{display:flex;width:100%;height:100%;flex-direction:row-reverse}
+.modal-video-panel{flex:0 0 35%;position:relative;overflow:hidden}
+.modal-video-panel video{width:100%;height:100%;object-fit:contain;background:#000}
 .modal-content-panel{flex:1;overflow-y:auto;padding:60px 44px;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2) transparent}
 .modal-content-panel::-webkit-scrollbar{width:4px}
 .modal-content-panel::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px}
@@ -105,7 +105,7 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 .storyboard-item .shot-time{font-size:10px;color:#c9a84c;letter-spacing:1px;padding-top:2px}
 .storyboard-item .shot-desc .tag{display:inline-block;font-size:10px;letter-spacing:1px;color:#c9a84c;border:1px solid rgba(201,168,76,.2);padding:1px 8px;border-radius:2px;margin-right:6px}
 .modal-footer-text{margin-top:32px;font-size:11px;letter-spacing:1px;color:rgba(240,237,232,.2);text-align:center}
-@media(max-width:900px){.modal-split{flex-direction:column}.modal-video-panel{flex:0 0 40vh}.modal-content-panel{padding:40px 20px}}
+@media(max-width:900px){.modal-split{flex-direction:column-reverse}.modal-video-panel{flex:0 0 35vh;width:100%}.modal-content-panel{padding:40px 20px}}
 </style></head><body>
 <nav class="nav-dots" id="navDots">
 <a href="#hero"></a><a href="#about"></a><a href="#concept"></a><a href="#highlights"></a><a href="#cases"></a><a href="#tech"></a><a href="#data"></a><a href="#footer"></a>
