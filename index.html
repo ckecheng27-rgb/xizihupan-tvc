@@ -77,7 +77,21 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 .storyboard-item:hover{border-color:rgba(201,168,76,.2)}
 .storyboard-item .shot-time{font-size:11px;letter-spacing:1px;color:#c9a84c;font-weight:300;padding-top:2px}
 .storyboard-item .shot-desc{font-size:13px;font-weight:200;line-height:1.7;color:rgba(240,237,232,.7)}
-.storyboard-item .shot-desc .tag{display:inline-block;font-size:10px;letter-spacing:1px;color:#c9a84c;border:1px solid rgba(201,168,76,.2);padding:1px 8px;border-radius:2px;margin-right:6px}
+/* Modal – 左侧视频 + 右侧内容 */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.94);z-index:200;display:flex;opacity:0;transition:opacity .3s;pointer-events:none}
+.modal-overlay.show{pointer-events:auto}
+.modal-split{display:flex;width:100%;height:100%}
+.modal-video-panel{flex:0 0 55%;position:relative;overflow:hidden}
+.modal-video-panel video{width:100%;height:100%;object-fit:cover}
+.modal-content-panel{flex:1;overflow-y:auto;padding:60px 44px;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.2) transparent}
+.modal-content-panel::-webkit-scrollbar{width:4px}
+.modal-content-panel::-webkit-scrollbar-thumb{background:rgba(201,168,76,.2);border-radius:2px}
+.modal-close{position:fixed;top:20px;right:24px;z-index:210;background:none;border:none;color:#f0ede8;font-size:28px;cursor:pointer;opacity:.5;transition:opacity .3s;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{opacity:1}
+.modal-header{margin-bottom:32px}
+.modal-header .case-number{font-size:10px;letter-spacing:4px;color:rgba(201,168,76,.5);margin-bottom:8px}
+.modal-header h2{font-size:clamp(22px,3vw,36px);font-weight:300;letter-spacing:3px;color:#f0ede8;margin-bottom:12px}
+.modal-header .core-idea{font-size:13px;line-height:1.8;color:rgba(240,237,232,.5);font-weight:200}
 .modal-section-title{font-size:13px;letter-spacing:3px;color:#c9a84c;margin:36px 0 16px;font-weight:300}
 .modal-aida{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:4px}
 .aida-item{padding:16px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.01)}
@@ -86,15 +100,18 @@ body{font-family:-apple-system,"PingFang SC","Noto Sans SC","Helvetica Neue",san
 .keyframes-grid{margin-top:4px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
 .keyframe-item{padding:12px 14px;border:1px solid rgba(255,255,255,.06);font-size:12px;font-weight:200;line-height:1.6;color:rgba(240,237,232,.6)}
 .keyframe-item .kf-num{display:inline-block;font-size:10px;color:#c9a84c;border:1px solid rgba(201,168,76,.2);padding:0 6px;margin-right:6px;border-radius:2px}
+.storyboard{margin-top:4px;display:flex;flex-direction:column;gap:6px}
+.storyboard-item{display:grid;grid-template-columns:80px 1fr;gap:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.04);font-size:12px;font-weight:200;line-height:1.6;color:rgba(240,237,232,.5)}
+.storyboard-item .shot-time{font-size:10px;color:#c9a84c;letter-spacing:1px;padding-top:2px}
+.storyboard-item .shot-desc .tag{display:inline-block;font-size:10px;letter-spacing:1px;color:#c9a84c;border:1px solid rgba(201,168,76,.2);padding:1px 8px;border-radius:2px;margin-right:6px}
 .modal-footer-text{margin-top:32px;font-size:11px;letter-spacing:1px;color:rgba(240,237,232,.2);text-align:center}
-@media(max-width:720px){.modal-scroll{padding:60px 20px 40px}.storyboard-item{grid-template-columns:1fr;gap:6px}}
+@media(max-width:900px){.modal-split{flex-direction:column}.modal-video-panel{flex:0 0 40vh}.modal-content-panel{padding:40px 20px}}
 </style></head><body>
 <nav class="nav-dots" id="navDots">
 <a href="#hero"></a><a href="#about"></a><a href="#concept"></a><a href="#highlights"></a><a href="#cases"></a><a href="#tech"></a><a href="#data"></a><a href="#footer"></a>
 </nav>
 <div class="modal-overlay" id="modalOverlay"><button class="modal-close" id="modalClose">&#x2715;</button>
-<video class="modal-bg-video" id="modalBgVideo" autoplay muted loop playsinline></video>
-<div class="modal-scroll" id="modalScroll"><div class="modal-inner" id="modalInner"></div></div></div>
+<div class="modal-split"><div class="modal-video-panel"><video id="modalVideo" autoplay muted loop playsinline></video></div><div class="modal-content-panel" id="modalScroll"><div class="modal-inner" id="modalInner"></div></div></div></div>
 <div class="scroll-container" id="scrollContainer">
 <section class="section" id="hero">
 <video class="video-bg" autoplay muted loop playsinline><source src="videos/hero-bg.mp4" type="video/mp4"></video>
@@ -210,7 +227,7 @@ c:'<strong>反差幽默·钓鱼梗</strong><br>十惠鸭苦等无果，用红包
 a:[{l:"A 引起注意",d:"清晨西湖十惠鸭持竿静坐"},{l:"I 激发兴趣",d:"鱼漂不动"},{l:"D 唤起欲望",d:"用红包打窝"},{l:"A 促成行动",d:"鱼群跃出水面"}],
 s:[{g:"0-3s",d:'<span class="tag">大远景</span>清晨西湖薄雾弥漫'},{g:"4-9s",d:'<span class="tag">中景</span>十惠鸭苦等鱼漂不动'},{g:"10-12s",d:'<span class="tag">水下</span>鱼用嘲弄眼神看十惠鸭'},{g:"13-15s",d:'<span class="tag">特写</span>灵光一闪用红包打窝'},{g:"16-19s",d:'<span class="tag">全景</span>撒出红包金色光芒'},{g:"20-23s",d:'<span class="tag">远景</span>鱼群跃出水面抢红包'}]}
 };
-var O=document.getElementById("modalOverlay"),B=document.getElementById("modalClose"),I=document.getElementById("modalInner"),V=document.getElementById("modalBgVideo"),S=document.getElementById("scrollContainer");
+var O=document.getElementById("modalOverlay"),B=document.getElementById("modalClose"),I=document.getElementById("modalInner"),V=document.getElementById("modalVideo"),S=document.getElementById("scrollContainer");
 function openCase(n){var d=C[n];if(!d)return;V.src=d.v;V.play().catch(function(){});
 var sh="";if(d.k&&d.f){sh='<div class="keyframes-grid">';for(var i=0;i<d.f.length;i++){sh+='<div class="keyframe-item"><span class="kf-num">KF '+(i+1)+"</span>"+d.f[i]+"</div>"}sh+="</div>";}else if(d.s&&d.s.length){sh='<div class="storyboard">';for(var j=0;j<d.s.length;j++){sh+='<div class="storyboard-item"><div class="shot-time">'+d.s[j].g+'</div><div class="shot-desc">'+d.s[j].d+"</div></div>"}sh+="</div>";}
 var ah='<div class="modal-aida">';for(var k=0;k<d.a.length;k++){ah+='<div class="aida-item"><div class="aida-label">'+d.a[k].l+'</div><p>'+d.a[k].d+"</p></div>"}ah+="</div>";
